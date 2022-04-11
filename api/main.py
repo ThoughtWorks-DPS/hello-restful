@@ -9,9 +9,13 @@ tags_metadata = [
         "name": "status codes",
         "description": "Return desired status code from any method."
     },
-        {
+    {
         "name": "request inspection",
         "description": "View elements in the request."
+    },
+    {
+        "name": "example resource",
+        "description": "Simulated employee list."
     }
 ]
 
