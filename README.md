@@ -21,7 +21,7 @@ initial resources
 * POST /resource = expects json body, returns whatever you send (within validation rules)
 * PUT /resource/{id} = expects json body, valid {id}, returns the resulting updated record. Expects to update the full record and if you don't send values for fields then they are replaced with Null. (within validation rules)
 * PATCH /resource/{id} = expects json body, valid {id}. returns the resulting updated record. Only updates fields you provide, up to all. Where a field is not provided no change is made. (within validation rules)
-* DELETE resource/{id} = returns 200 so long as you specify valid {id} 
+* DELETE resource/{id} = returns 204 so long as you specify valid {id} 
 
 ## TODO
 
@@ -33,7 +33,7 @@ _for each of the pseudo file-fetch interfaces, there is meta data assumed to be 
 {
   "file_id": "id",
   "owner": "id",
-  "groups": ["gropu_2", "gropu_2"]
+  "groups": ["group_2", "group_2"]
 }
 
 ## developement

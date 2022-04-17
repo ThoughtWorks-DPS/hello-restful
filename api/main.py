@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routes import inspection, status, methods
+from .routes import inspection, status, methods, file_response
 
 tags_metadata = [
     {
@@ -16,6 +16,10 @@ tags_metadata = [
     {
         "name": "example resource",
         "description": "Simulated employee list."
+    },
+    {
+        "name": "response formats",
+        "description": "Return different file formats."
     }
 ]
 
@@ -39,6 +43,7 @@ api = FastAPI(
 api.include_router(inspection.route)
 api.include_router(status.route)
 api.include_router(methods.route)
+api.include_router(file_response.route)
 
 @api.get("/", summary="greeting", tags=["main"])
 async def root():
