@@ -42,7 +42,7 @@ jobs:
   static-analysis:
     docker:
       - image: << pipeline.parameters.executor-image >>
-    shell: << pipeline.parameters.shell-options >>
+    # shell: << pipeline.parameters.shell-options >>
     steps:
       - run:
           name: install static analysis tools
