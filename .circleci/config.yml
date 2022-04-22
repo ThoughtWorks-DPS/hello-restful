@@ -51,7 +51,7 @@ jobs:
           command: |
             pip install pipenv
             PIPENV_VENV_IN_PROJECT=1 pipenv install --dev
-            pipenv shell
+            # pipenv shell
             echo "PATH=/.venv/bin:\$PATH" >> $BASH_ENV
       - run:
           name: lint
