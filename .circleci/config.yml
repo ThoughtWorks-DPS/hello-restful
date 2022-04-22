@@ -51,14 +51,13 @@ jobs:
           command: |
             pip install pipenv
             PIPENV_VENV_IN_PROJECT=1 pipenv install --dev
-            # pipenv shell
             echo "PATH=/.venv/bin:\$PATH" >> $BASH_ENV
       - run:
           name: lint
-          command: pylint api
+          command: pipenv run pylint api
       - run:
           name: unit tests
-          command: pytest -vv -l 
+          command: pipenv run pytest -vv -l 
       - run:
           name: change to include test coverage reporting
           command: echo 'change'
