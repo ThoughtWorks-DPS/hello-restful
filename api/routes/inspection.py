@@ -1,3 +1,8 @@
+"""
+hello-restful api
+
+Example header inspection
+"""
 from fastapi import APIRouter, Request, status
 
 route = APIRouter()
@@ -13,7 +18,6 @@ async def get_headers(request: Request):
     """
     return {"headers": request.headers}
 
-
 @route.get("/ip/",
            summary="Returns the requester's IP Address.",
            tags=["request inspection"],
@@ -24,4 +28,3 @@ async def get_ip(request: Request):
     Returns request.client.host.
     """
     return {"ip": request.client.host}
-

@@ -23,8 +23,6 @@ initial resources
 * PATCH /resource/{id} = expects json body, valid {id}. returns the resulting updated record. Only updates fields you provide, up to all. Where a field is not provided no change is made. (within validation rules)
 * DELETE resource/{id} = returns 204 so long as you specify valid {id} 
 
-## TODO
-
 ### data respones
 _for each of the pseudo file-fetch interfaces, there is meta data assumed to be associated with the stored file available on /{id}/metadata. The metadata is to enable a simple representation of file ownership and security._
 * GET /json/{id} = returns simple json docment, accept any 30 char int for id though returns the same json
@@ -36,9 +34,9 @@ _for each of the pseudo file-fetch interfaces, there is meta data assumed to be 
   "groups": ["group_2", "group_2"]
 }
 
-## developement
+## local developement
 
-run the app for now
+run the app locally (not as container)
 ```
-$ uvicorn api:main:api --reload
+$ uvicorn api.main:api --reload
 ```

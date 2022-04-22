@@ -1,19 +1,5 @@
-
-@app.get("/items/{item_id}")
-async def read_item(item_id):
-    return {"item_id": item_id: int}
-
-
-
-# in the below, you can see where specific 'users' can be reserved words, the reserved must come first
-@app.get("/users/me")
-async def read_user_me():
-    return {"user_id": "the current user"}
-
-
-@app.get("/users/{user_id}")
-async def read_user(user_id: str):
-    return {"user_id": user_id}
+# misc notes on other api interactions
+#
 
 
 # below would be: http://127.0.0.1:8000/items/?skip=0&limit=10

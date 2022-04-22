@@ -1,3 +1,9 @@
+"""
+hello-restful api
+
+An example of a RESTful API written in Python using FastAPI. Modeled after httobin,
+but with some api resources definitions useful for misc mocks and other testing.
+"""
 from fastapi import FastAPI
 from .routes import inspection, status, methods, file_response
 
@@ -23,14 +29,14 @@ tags_metadata = [
     }
 ]
 
-description = """
+DESCRIPTION = """
 ### Lightweight restul api simulator and testing endpoint.
 [Repository](https://github.com/ThoughtWorks-DPS/hello-restful)
 """
 
 api = FastAPI(
     title="hello-restful",
-    description=description,
+    description=DESCRIPTION,
     version="0.0.1",
     license_info={
         "name": "MIT License",
@@ -47,4 +53,7 @@ api.include_router(file_response.route)
 
 @api.get("/", summary="greeting", tags=["main"])
 async def root():
+    """
+    root endpoint and hello response.
+    """
     return {"message": "Hello Restful!"}

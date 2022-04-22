@@ -1,11 +1,16 @@
-from fastapi import APIRouter, Response, status, Path
-from fastapi.responses import FileResponse, HTMLResponse
+"""
+hello-restful api
+
+Example file response
+"""
+from fastapi import APIRouter, status
+from fastapi.responses import FileResponse
 
 # file paths
-html_file = "./api/static/index.html"
-png_file = "./api/static/thoughtworks_flamingo_wave.png"
-mp4_video_file = "./api/static/birds.mp4"
-
+HTML_FILE = "./api/static/index.html"
+HTML_METADATA = "./api/static/html_metadata.json"
+PNG_FILE = "./api/static/thoughtworks_flamingo_wave.png"
+PNG_METADATA = "./api/static/png_metadata.json"
 
 route = APIRouter()
 
@@ -16,7 +21,8 @@ route = APIRouter()
                  status_code=status.HTTP_200_OK
                  )
 async def get_html():
-    return html_file
+    """Return html file."""
+    return HTML_FILE
 
 @route.get("/png",
                  summary="Return png image file.",
@@ -25,4 +31,25 @@ async def get_html():
                  status_code=status.HTTP_200_OK
                  )
 async def get_png():
-    return png_file
+    """Return png image file."""
+    return PNG_FILE
+
+@route.get("/html/metadata",
+                 summary="Return file metadata.",
+                 tags=["response formats"],
+                 response_class=FileResponse,
+                 status_code=status.HTTP_200_OK
+                 )
+async def get_html_metadata():
+    """Return hmtl file metadata."""
+    return HTML_METADATA
+
+@route.get("/png/metadata",
+                 summary="Return file metadata.",
+                 tags=["response formats"],
+                 response_class=FileResponse,
+                 status_code=status.HTTP_200_OK
+                 )
+async def get_png_metadata():
+    """Return png file metadata."""
+    return PNG_METADATA

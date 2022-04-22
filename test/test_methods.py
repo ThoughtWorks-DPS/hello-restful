@@ -14,28 +14,28 @@ def test_resource_get():
           "last_name": "Sanchez",
           "email": "maria@example.com",
           "position": "staff",
-          "id": 101444
+          "userid": 101444
         },
         {
           "first_name": "Quo",
           "last_name": "Chen",
           "email": "quobinchen@domain.com",
           "position": "staff",
-          "id": 1049832
+          "userid": 1049832
         },
         {
           "first_name": "Danelle",
           "last_name": "Johnson",
           "email": "danellej@custom.com",
           "position": "manager",
-          "id": 276076
+          "userid": 276076
         },
         {
           "first_name": "Sean",
           "last_name": "Monroe",
           "email": "smonroe44@social.com",
           "position": "staff",
-          "id": 457221
+          "userid": 457221
         }
       ]
     }
@@ -48,7 +48,7 @@ def test_resource_get_valid_id():
       "last_name": "Sanchez",
       "email": "maria@example.com",
       "position": "staff",
-      "id": 101444
+      "userid": 101444
     }
 
 def test_resource_get_invalid_id():
@@ -70,7 +70,7 @@ def test_resource_post():
       "last_name": "bar",
       "email": "foo@example.com",
       "position": "staff",
-      "id": 509612
+      "userid": 509612
     }
 
 # post: include fields in json payload that are not in the schema
@@ -189,7 +189,7 @@ def test_resource_put():
       "last_name": "bar",
       "email": "foo@example.com",
       "position": "staff",
-      "id": 101444
+      "userid": 101444
     }
 
 # put: fail to include required fields, include extra fields in json payload
@@ -241,7 +241,7 @@ def test_resource_patch():
       "last_name": "Sanchez",
       "email": "maria@example.com",
       "position": "manager",
-      "id": 101444
+      "userid": 101444
     }
 
 # patch:  include fields in json payload that are not in the schema

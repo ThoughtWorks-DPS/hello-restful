@@ -1,0 +1,73 @@
+---
+version: 2.1
+
+# ==== global pipeline parameters
+
+parameters:
+  context:
+    description: circleci context for all jobs
+    type: string
+    default: twdps-core-labs-team
+  shell-options:
+    description: shell options for all jobs
+    type: string
+    default: secrethub run --env-file secrethub.env -- /bin/bash -eo pipefail
+  # terraform-version:
+  #   description: terraform version for all jobs
+  #   type: string
+  #   default: "1.1.5"
+  # datadog-version:
+  #   description: datadog cli version for all jobs
+  #   type: string
+  #   default: "0.43.0"
+  executor-image:
+    description: python executor image
+    type: string
+    default: cimg/python:3.9
+
+on-push-main: &on-push-main
+  branches:
+    only: /main/
+  tags:
+    ignore: /.*/
+
+on-tag-main: &on-tag-main
+  branches:
+    ignore: /.*/
+  tags:
+    only: /.*/
+
+jobs:
+
+  static-analysis:
+    docker:
+      - image: << pipeline.parameters.executor-image >>
+    shell: << pipeline.parameters.shell-options >>
+    steps:
+      - run:
+          name: install static analysis tools
+          command: |
+            pip install pipenv
+            pipenv install --dev
+      - run:
+          name: lint
+          command: pylint api
+      - run:
+          name: unit tests
+          command: pytest -vv -l 
+      - run:
+          name: change to include test coverage reporting
+          command: echo 'change'
+
+workflows:
+  version: 2
+
+  dev-build:
+    jobs:
+      - static-analysis:
+          context: << pipeline.parameters.context >>
+
+
+
+
+
