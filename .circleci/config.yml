@@ -43,7 +43,7 @@ jobs:
     docker:
       - image: << pipeline.parameters.executor-image >>
         environment:
-          PIPENV_VENV_IN_PROJECT: true
+          PIPENV_VENV_IN_PROJECT: 1
     # shell: << pipeline.parameters.shell-options >>
     steps:
       - run:
