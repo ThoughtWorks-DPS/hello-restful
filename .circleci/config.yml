@@ -49,6 +49,7 @@ jobs:
           command: |
             pip install pipenv
             pipenv install --dev
+            pipenv shell
       - run:
           name: lint
           command: pylint api
