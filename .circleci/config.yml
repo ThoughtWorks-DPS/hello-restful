@@ -44,6 +44,8 @@ jobs:
       - image: << pipeline.parameters.executor-image >>
     # shell: << pipeline.parameters.shell-options >>
     steps:
+      - checkout
+      - setup_remote_docker
       - run:
           name: install static analysis tools
           command: |
