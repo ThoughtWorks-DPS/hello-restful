@@ -23,7 +23,7 @@ parameters:
   executor-image:
     description: python executor image
     type: string
-    default: cimg/python:3.9
+    default: cimg/python:3.9.11
 
 on-push-main: &on-push-main
   branches:
