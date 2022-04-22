@@ -42,6 +42,8 @@ jobs:
   static-analysis:
     docker:
       - image: << pipeline.parameters.executor-image >>
+        environment:
+          PIPENV_VENV_IN_PROJECT: true
     # shell: << pipeline.parameters.shell-options >>
     steps:
       - run:
@@ -49,7 +51,6 @@ jobs:
           command: |
             pip install pipenv
             pipenv install --dev
-            pipenv shell
       - run:
           name: lint
           command: pylint api
