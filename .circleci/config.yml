@@ -61,10 +61,11 @@ jobs:
           name: unit tests
           command: |
             pipenv run coverage run -m pytest -vv -l 
-            pipenv run coverage xml --omit='env/*,tests/*'
+            pipenv run coverage xml --omit='test/*'
             cc-test-reporter format-coverage -t coverage.py
             cc-test-reporter upload-coverage
 
+  build-image:
 
 workflows:
   version: 2
@@ -73,7 +74,8 @@ workflows:
     jobs:
       - static-analysis:
           context: << pipeline.parameters.context >>
-
+      - build-image:
+          context: << pipeline.parameters.context >>
 
 
 

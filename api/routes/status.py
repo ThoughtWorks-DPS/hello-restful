@@ -35,4 +35,4 @@ def return_status(response: Response,
                  ):
     """Return the requested status code."""
     response.status_code=code
-    return {"code": code}
+    return { "code": code }

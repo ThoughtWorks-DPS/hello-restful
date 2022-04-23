@@ -1,22 +1,25 @@
 from fastapi.testclient import TestClient
 
 from api.main import api
+from api.config import route_prefix
 
 client = TestClient(api)
+client.base_url += route_prefix
+client.base_url = client.base_url.rstrip("/") + "/"
 
 # missing format inspection tests
 def test_get_png():
-    response = client.get("/png")
+    response = client.get("png")
     assert response.status_code == 200
 
 def test_get_html():
-    response = client.get("/html")
+    response = client.get("html")
     print(response.headers)
     assert response.status_code == 200
 
 # metedata inspection tests
 def test_get_png_metadata():
-    response = client.get("/png/metadata")
+    response = client.get("png/metadata")
     assert response.status_code == 200
     assert response.json() == {
       "file_id": "5f746133-dbd7-45e1-8c22-dfa08d54b001",
@@ -25,7 +28,7 @@ def test_get_png_metadata():
     }
 
 def test_get_html_metadata():
-    response = client.get("/html/metadata")
+    response = client.get("html/metadata")
     print(response.headers)
     assert response.status_code == 200
     assert response.json() == {

@@ -5,7 +5,9 @@ An example of a RESTful API written in Python using FastAPI. Modeled after httob
 but with some api resources definitions useful for misc mocks and other testing.
 """
 from fastapi import FastAPI
-from .routes import inspection, status, methods, file_response
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from .routes import inspection, status, methods, file_response, health
+from .config import settings, route_prefix
 
 tags_metadata = [
     {
@@ -29,31 +31,28 @@ tags_metadata = [
     }
 ]
 
-DESCRIPTION = """
-### Lightweight restul api simulator and testing endpoint.
-[Repository](https://github.com/ThoughtWorks-DPS/hello-restful)
-"""
-
 api = FastAPI(
-    title="hello-restful",
-    description=DESCRIPTION,
-    version="0.0.1",
-    license_info={
-        "name": "MIT License",
-        "url": "https://opensource.org/licenses/MIT"
-    },
+    title=settings.title,
+    description=settings.description,
+    version=settings.releaseId,
     openapi_tags=tags_metadata,
-    docs_url="/apidocs", redoc_url=None
+    docs_url=f"{route_prefix}/apidocs",
+    openapi_url=f"{route_prefix}/openapi.json",
+    redoc_url=None,
+    debug=settings.debug
 )
 
-api.include_router(inspection.route)
-api.include_router(status.route)
-api.include_router(methods.route)
-api.include_router(file_response.route)
+api.include_router(inspection.route, prefix=route_prefix)
+api.include_router(status.route, prefix=route_prefix)
+api.include_router(methods.route, prefix=route_prefix)
+api.include_router(file_response.route, prefix=route_prefix)
+api.include_router(health.route, prefix=route_prefix)
 
-@api.get("/", summary="greeting", tags=["main"])
+@api.get(route_prefix, summary="greeting", tags=["main"])
 async def root():
     """
     root endpoint and hello response.
     """
-    return {"message": "Hello Restful!"}
+    return { "message": "Hello Restful!" }
+
+FastAPIInstrumentor.instrument_app(api)
