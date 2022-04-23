@@ -16,3 +16,41 @@ Pipfile*
 README.md
 sercrethub.env
 api/__pycache__/
+
+
+
+
+[run]
+branch = True
+omit =
+      .pytest_cache/
+      .circleci/
+      .codeclimate.yml
+      .coveragerc
+      .gitignore
+      .pylintrc
+      .python-version
+      Dockerfile
+      LICENSE
+      notes.py 
+      Pipfile*
+      README.md
+      sercrethub.env
+      api/__pycache__/
+
+[report]
+omit =
+      .pytest_cache/
+      .circleci/
+      .codeclimate.yml
+      .coveragerc
+      .gitignore
+      .pylintrc
+      .python-version
+      Dockerfile
+      LICENSE
+      notes.py 
+      Pipfile*
+      README.md
+      sercrethub.env
+      api/__pycache__/
