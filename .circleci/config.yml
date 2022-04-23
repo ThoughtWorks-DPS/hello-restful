@@ -49,6 +49,8 @@ jobs:
       - run:
           name: install static analysis tools
           command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > /usr/local/bin/cc-test-reporter
+            chmod +x /usr/local/bin/cc-test-reporter
             pip install pipenv
             PIPENV_VENV_IN_PROJECT=1 pipenv install --dev
             echo "PATH=/.venv/bin:\$PATH" >> $BASH_ENV
@@ -57,10 +59,12 @@ jobs:
           command: pipenv run pylint api
       - run:
           name: unit tests
-          command: pipenv run pytest -vv -l 
-      - run:
-          name: change to include test coverage reporting
-          command: echo 'change'
+          command: |
+            pipenv run coverage run -m pytest -vv -l 
+            pipenv run coverage xml --omit='env/*,tests/*'
+            cc-test-reporter format-coverage -t coverage.py
+            cc-test-reporter upload-coverage
+
 
 workflows:
   version: 2

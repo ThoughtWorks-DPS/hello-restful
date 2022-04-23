@@ -12,6 +12,7 @@ email-validator = "1.1.3"
 pytest = "*"
 requests = "*"
 pylint = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.9"

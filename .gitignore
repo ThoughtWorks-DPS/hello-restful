@@ -1,0 +1,6 @@
+coverage.xml
+.coverage
+coverage/
+api/__pycache__/
+api/routes/__pycache__/
+test/__pycache__/

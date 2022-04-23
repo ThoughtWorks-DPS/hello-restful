@@ -26,11 +26,6 @@ class UserUpdate(BaseModel, anystr_strip_whitespace=True, extra="forbid"):
     email: Optional[EmailStr]
     position: Optional[str] = Field(None, min_length=3, max_length=45, regex=LETTERS_PLUS_DASH)
 
-#email: EmailStr | None
-# Optional[str] = Field(
-#         None, title="The description of the item", max_length=300
-#     )
-
 # simulated database
 resource_data = {
     "employees": [
@@ -56,9 +51,9 @@ resource_data = {
             "userid": 276076
         },
         {
-            "first_name": "Sean",
-            "last_name": "Monroe",
-            "email": "smonroe44@social.com",
+            "first_name": "Pete",
+            "last_name": "Santos",
+            "email": "psantos44@social.com",
             "position": "staff",
             "userid": 457221
         }
@@ -76,10 +71,10 @@ async def get_resource(response: Response, last_name: Optional[str] = None):
     """Return all resources or search for matching last names"""
     if last_name:
         results = search_query(last_name) # pylint: disable=too-many-function-args
-        if results:
+        if results["employees"]:
             response.status_code = status.HTTP_200_OK
             return results
-        response.status_code = status.HTTP_204_NO_CONTENT
+        response.status_code = status.HTTP_404_NOT_FOUND
         return { "message": "no search results" }
 
     # response with all resources
@@ -123,7 +118,7 @@ def post_resource(user: UserIn, response: Response):
     result = [x for x in resource_data['employees'] if x["email"]==user.email]
     if len(result) != 0:
         response.status_code=status.HTTP_403_FORBIDDEN
-        return {"detail": "supplied email is already in use."}
+        return { "detail": "supplied email is already in use." }
 
     # mock creating new resource
     new_user = user.dict()
@@ -155,7 +150,7 @@ def put_resource_userid(user: UserIn, response: Response,
     result = [x for x in data_copy['employees'] if x["userid"]==userid]
     if len(result) == 0:
         response.status_code=status.HTTP_404_NOT_FOUND
-        return {"detail": "Resource not found"}
+        return { "detail": "Resource not found" }
 
     # replace all fields in existing resource
     result[0].update(user.dict())
@@ -185,7 +180,7 @@ def patch_resource_userid(user: UserUpdate, response: Response,
     result = [x for x in data_copy['employees'] if x["userid"]==userid]
     if len(result) == 0:
         response.status_code=status.HTTP_404_NOT_FOUND
-        return {"detail": "Resource not found"}
+        return { "detail": "Resource not found" }
 
     # merge changes to existing resource
     result[0].update(user.dict(exclude_unset=True))
@@ -215,8 +210,12 @@ def delete_resource_userid(response: Response,
 
 def search_query(last_name):
     """very basic search query"""
-    matching = {}
+    matching = {
+        "employees": []
+    }
+
     for user in resource_data["employees"]:
         if user["last_name"].find(last_name) != -1:
-            matching.update(user)
+            matching["employees"].append(user)
+            # matching.update(user)
     return matching
