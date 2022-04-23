@@ -17,7 +17,10 @@ omit =
       Pipfile*
       README.md
       sercrethub.env
+      api/__init__.py
+      api/routes/__init__.py
       api/__pycache__/
+      api/routes/__pycache__/
 
 [report]
 omit =
@@ -34,4 +37,7 @@ omit =
       Pipfile*
       README.md
       sercrethub.env
+      api/__init__.py
+      api/routes/__init__.py
       api/__pycache__/
+      api/routes/__pycache__/
