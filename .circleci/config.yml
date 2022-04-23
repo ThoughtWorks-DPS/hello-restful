@@ -50,7 +50,7 @@ jobs:
           name: install static analysis tools
           command: |
             sudo bash -c "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > /usr/local/bin/cc-test-reporter"
-            chmod +x /usr/local/bin/cc-test-reporter
+            sudo chmod +x /usr/local/bin/cc-test-reporter
             pip install pipenv
             PIPENV_VENV_IN_PROJECT=1 pipenv install --dev
             echo "PATH=/.venv/bin:\$PATH" >> $BASH_ENV
