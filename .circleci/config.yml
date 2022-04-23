@@ -74,8 +74,8 @@ workflows:
     jobs:
       - static-analysis:
           context: << pipeline.parameters.context >>
-      - build-image:
-          context: << pipeline.parameters.context >>
+      # - build-image:
+      #     context: << pipeline.parameters.context >>
 
 
 
