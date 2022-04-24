@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     description: str = DESCRIPTION
     prefix: str = "/hello"
     debug: bool = False
-    releaseId: str = os.environ.get("API_VERSION")
+    releaseId: str = "0.0.0" # os.environ.get("API_VERSION")
     version: str = "v1"
 
 settings = Settings()
