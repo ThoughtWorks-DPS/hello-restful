@@ -3,7 +3,7 @@ hello-restful api
 
 api base configuration
 """
-import os
+#import os
 from pydantic import BaseSettings
 
 DESCRIPTION = """
