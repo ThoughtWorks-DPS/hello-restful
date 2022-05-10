@@ -4,9 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-fastapi = "0.75.1"
-uvicorn = "0.17.6"
-email-validator = "1.1.3"
+fastapi = "==0.75.1"
+uvicorn = "==0.17.6"
+email-validator = "==1.1.3"
 opentelemetry-instrumentation-fastapi = "*"
 
 [dev-packages]
