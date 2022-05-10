@@ -2,7 +2,7 @@
 version: 2.1
 
 orbs:
-  python: twdps/orb-tools@dev:latest
+  python: twdps/python-api@dev:latest
 
 # ==== global pipeline parameters
 
