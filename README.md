@@ -22,4 +22,3 @@ $ uvicorn api.main:api --reload
 
 Access on http://localhost/v1/hello  
 OAS documentation on http://localhost/v1/hello/apidocs  
-
