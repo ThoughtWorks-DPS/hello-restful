@@ -76,7 +76,7 @@ workflows:
   dev-build:
     jobs:
       - python/static-analysis:
-          shell: << pipeline.parameters.shell-options >>
+          #shell: << pipeline.parameters.shell-options >>
           context: << pipeline.parameters.context >>
           virtualenv: << pipeline.parameters.virtualenv >>
           lint-path: api
