@@ -80,6 +80,7 @@ workflows:
           context: << pipeline.parameters.context >>
           virtualenv: << pipeline.parameters.virtualenv >>
           lint-path: api
+          report-coverage: codeclimate
 
       # - build-image:
       #     context: << pipeline.parameters.context >>
