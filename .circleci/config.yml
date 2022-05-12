@@ -23,6 +23,7 @@ parameters:
     description: publish to this registry
     type: string
     default: ghcr.io
+    
   # datadog-version:
   #   description: datadog cli version for all jobs
   #   type: string
