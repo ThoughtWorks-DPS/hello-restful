@@ -43,7 +43,7 @@ on-tag-main: &on-tag-main
 workflows:
   version: 2
 
-  dev-build:
+  hello-restful-api-development-build:
     jobs:
       # - python/clone-only
       - python/static-analysis:
@@ -53,6 +53,7 @@ workflows:
           lint-path: api
           report-coverage: codeclimate
           cis-docker-image-scan: true
+          filters: *on-push-main
 
       - python/secure-image-build:
           name: secure-build
@@ -66,3 +67,4 @@ workflows:
           # port-definition: "8000:8000"
           requires:
             - static-code-analysis
+          filters: *on-push-main
