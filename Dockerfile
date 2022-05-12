@@ -54,4 +54,3 @@ RUN pip install --user --no-cache-dir pipenv==2022.4.21 && \
 # WORKDIR /home/nonroot
 
 CMD [".venv/bin/uvicorn", "api.main:api", "--host", "0.0.0.0", "--port", "8000"]
-
