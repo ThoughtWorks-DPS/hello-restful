@@ -80,6 +80,7 @@ workflows:
           #shell: << pipeline.parameters.shell-options >>
           context: << pipeline.parameters.context >>
           virtualenv: << pipeline.parameters.virtualenv >>
+          install-dev: true
           lint-path: api
 
       # - build-image:
