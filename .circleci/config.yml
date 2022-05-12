@@ -23,7 +23,7 @@ parameters:
     description: publish to this registry
     type: string
     default: ghcr.io
-    
+
   # datadog-version:
   #   description: datadog cli version for all jobs
   #   type: string
@@ -46,26 +46,27 @@ workflows:
 
   development-build:
     jobs:
-      - python/machine-clone-only
-      # - python/static-analysis:
-      #     name: static-code-analysis
-      #     context: << pipeline.parameters.context >>
-      #     package-manager: << pipeline.parameters.package-manager >>
-      #     lint-path: api
-      #     report-coverage: codeclimate
-      #     cis-docker-image-scan: true
-      #     filters: *on-push-main
+      # - python/machine-clone-only
+      - python/static-analysis:
+          name: static-code-analysis
+          context: << pipeline.parameters.context >>
+          package-manager: << pipeline.parameters.package-manager >>
+          lint-path: api
+          report-coverage: codeclimate
+          cis-docker-image-scan: true
+          filters: *on-push-main
 
-      # - python/secure-image-build:
-      #     name: secure-build
-      #     context: << pipeline.parameters.context >>
-      #     shell: << pipeline.parameters.shell-options >>
-      #     registry: << pipeline.parameters.registry >>
-      #     image: hello-restful
-      #     image-cve-scan: true
-      #     snyk-organization: twdps
-      #     # health-url: "http://0.0.0.0:8000/v1/hello/healthz/"
-      #     # port-definition: "8000:8000"
-      #     requires:
-      #       - static-code-analysis
-      #     filters: *on-push-main
+      - python/secure-image-build:
+          name: secure-build
+          context: << pipeline.parameters.context >>
+          shell: << pipeline.parameters.shell-options >>
+          python-version: "3.9.10"
+          registry: << pipeline.parameters.registry >>
+          image: hello-restful
+          image-cve-scan: true
+          snyk-organization: twdps
+          # health-url: "http://0.0.0.0:8000/v1/hello/healthz/"
+          # port-definition: "8000:8000"
+          requires:
+            - static-code-analysis
+          filters: *on-push-main
