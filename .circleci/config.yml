@@ -75,12 +75,12 @@ workflows:
 
   dev-build:
     jobs:
-      - python/clone-only
-      # - python/static-analysis:
-      #     #shell: << pipeline.parameters.shell-options >>
-      #     context: << pipeline.parameters.context >>
-      #     virtualenv: << pipeline.parameters.virtualenv >>
-      #     lint-path: api
+      # - python/clone-only
+      - python/static-analysis:
+          #shell: << pipeline.parameters.shell-options >>
+          context: << pipeline.parameters.context >>
+          virtualenv: << pipeline.parameters.virtualenv >>
+          lint-path: api
 
       # - build-image:
       #     context: << pipeline.parameters.context >>

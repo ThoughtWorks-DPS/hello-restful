@@ -1,24 +1,56 @@
-FROM python:3.9-slim AS build-env
+FROM python:3.9-alpine as builder
 
-# Setup env
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONFAULTHANDLER 1
+LABEL maintainer=<nchenewe@thoughtworks.com>
 
-# install requirements
-COPY /api /api
-RUN pip install pipenv
-COPY Pipfile .
-COPY Pipfile.lock .
-RUN PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
+ENV MUSL_LOCPATH=/usr/share/i18n/locales/musl \
+    LANG="C.UTF-8" \
+    LANGUAGE="en_US.UTF-8" \
+    LC_ALL="en_US.UTF-8" \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONFAULTHANDLER=1
 
-# :nonroot-amd64
+RUN apk add --no-cache \
+        libintl==0.21-r0 && \
+    apk --no-cache add --virtual build-dependencies \
+        cmake==3.21.3-r0 \
+        make==4.3-r0 \
+        musl==1.2.2-r7 \
+        musl-dev==1.2.2-r7 \
+        musl-utils==1.2.2-r7 \
+        gcc==10.3.1_git20211027-r0 \
+        gettext-dev==0.21-r0 && \
+    wget -q https://gitlab.com/rilian-la-te/musl-locales/-/archive/master/musl-locales-master.zip && \
+    unzip musl-locales-master.zip && cd musl-locales-master && \
+    cmake -DLOCALE_PROFILE=OFF -D CMAKE_INSTALL_PREFIX:PATH=/usr . && \
+    make && make install && \
+    cd .. && rm -r musl-locales-master && \
+    adduser -D hello && \
+    apk del build-dependencies
+
+USER hello
+WORKDIR /home/hello
+
+COPY --chown=hello:hello /api ./api
+COPY --chown=hello:hello Pipfile Pipfile
+ENV PATH="/home/hello/.local/bin:/home/hello/.venv/bin:${PATH}"
+
+RUN pip install --user pipenv && \
+    PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
+
+# the below does not work. Nothing copied is actually visible within the runtime,
+# though this is still a widely documented method.
+#
 # FROM gcr.io/distroless/python3:debug-amd64
 
-# Copy virtual env from python-deps stage
-# COPY --from=build-env /.venv /.venv
-# COPY --from=build-env /api /api
-ENV PATH="/.venv/bin:$PATH"
+# ENV MUSL_LOCPATH=/usr/share/i18n/locales/musl \
+#     LANG="C.UTF-8" \
+#     LANGUAGE="en_US.UTF-8" \
+#     LC_ALL="en_US.UTF-8" \
+#     PATH="/home/nonroot/.local/bin:/home/nonroot/.venv/bin:${PATH}"
 
-CMD ["uvicorn", "api.main:api", "--host", "0.0.0.0", "--port", "80"]
+# COPY --chown=nonroot:nonroot --from=builder /home/hello/.venv /home/nonroot/.venv
+# COPY --chown=nonroot:nonroot /api /home/nonroot/api
+# WORKDIR /home/nonroot
+
+CMD [".venv/bin/uvicorn", "api.main:api", "--host", "0.0.0.0", "--port", "8000"]
+
