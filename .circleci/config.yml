@@ -15,18 +15,18 @@ parameters:
     description: shell options for all jobs
     type: string
     default: secrethub run --env-file secrethub.env -- /bin/bash -eo pipefail
-  virtualenv:
-    description: python virtual env method
+  package-manager:
+    description: python package manager
     type: string
     default: pipenv
+  registry: 
+    description: publish to this registry
+    type: string
+    default: ghcr.io
   # datadog-version:
   #   description: datadog cli version for all jobs
   #   type: string
   #   default: "0.43.0"
-  # executor-image:
-  #   description: python executor image
-  #   type: string
-  #   default: cimg/python:3.9.11
 
 on-push-main: &on-push-main
   branches:
@@ -40,10 +40,6 @@ on-tag-main: &on-tag-main
   tags:
     only: /.*/
 
-# jobs:
-
-#  build-image:
-
 workflows:
   version: 2
 
@@ -51,11 +47,22 @@ workflows:
     jobs:
       # - python/clone-only
       - python/static-analysis:
+          name: static-code-analysis
           context: << pipeline.parameters.context >>
-          virtualenv: << pipeline.parameters.virtualenv >>
+          package-manager: << pipeline.parameters.package-manager >>
           lint-path: api
           report-coverage: codeclimate
           cis-docker-image-scan: true
 
-      # - build-image:
-      #     context: << pipeline.parameters.context >>
+      - python/secure-image-build:
+          name: secure-build
+          context: << pipeline.parameters.context >>
+          shell: << pipeline.parameters.shell-options >>
+          registry: << pipeline.parameters.registry >>
+          image: hello-restful
+          image-cve-scan: true
+          snyk-organization: twdps
+          # health-url: "http://0.0.0.0:8000/v1/hello/healthz/"
+          # port-definition: "8000:8000"
+          requires:
+            - static-code-analysis
