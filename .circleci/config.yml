@@ -77,7 +77,6 @@ workflows:
     jobs:
       # - python/clone-only
       - python/static-analysis:
-          #shell: << pipeline.parameters.shell-options >>
           context: << pipeline.parameters.context >>
           virtualenv: << pipeline.parameters.virtualenv >>
           install-dev: true
