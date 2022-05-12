@@ -18,7 +18,7 @@ parameters:
   virtualenv:
     description: python virtual env method
     type: string
-    default: none
+    default: pipenv
   # datadog-version:
   #   description: datadog cli version for all jobs
   #   type: string
@@ -79,7 +79,6 @@ workflows:
       - python/static-analysis:
           context: << pipeline.parameters.context >>
           virtualenv: << pipeline.parameters.virtualenv >>
-          install-dev: true
           lint-path: api
 
       # - build-image:
