@@ -55,6 +55,7 @@ workflows:
           virtualenv: << pipeline.parameters.virtualenv >>
           lint-path: api
           report-coverage: codeclimate
+          cis-docker-image-scan: true
 
       # - build-image:
       #     context: << pipeline.parameters.context >>
