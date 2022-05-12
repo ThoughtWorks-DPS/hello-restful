@@ -18,7 +18,7 @@ parameters:
   virtualenv:
     description: python virtual env method
     type: string
-    default: pipenv
+    default: none
   # datadog-version:
   #   description: datadog cli version for all jobs
   #   type: string
