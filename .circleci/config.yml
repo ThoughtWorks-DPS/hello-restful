@@ -42,32 +42,6 @@ on-tag-main: &on-tag-main
 
 # jobs:
 
-#   static-analysis:
-#     docker:
-#       - image: << pipeline.parameters.executor-image >>
-#     shell: << pipeline.parameters.shell-options >>
-#     steps:
-#       - checkout
-#       - setup_remote_docker
-#       - run:
-#           name: install static analysis tools
-#           command: |
-#             sudo bash -c "curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > /usr/local/bin/cc-test-reporter"
-#             sudo chmod +x /usr/local/bin/cc-test-reporter
-#             pip install pipenv
-#             PIPENV_VENV_IN_PROJECT=1 pipenv install --dev
-#             echo "PATH=/.venv/bin:\$PATH" >> $BASH_ENV
-#       - run:
-#           name: lint
-#           command: pipenv run pylint api
-#       - run:
-#           name: unit tests
-#           command: |
-#             pipenv run coverage run -m pytest -vv -l 
-#             pipenv run coverage xml --omit='test/*'
-#             cc-test-reporter format-coverage -t coverage.py
-#             cc-test-reporter upload-coverage
-
 #  build-image:
 
 workflows:

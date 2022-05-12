@@ -9,6 +9,7 @@ ENV MUSL_LOCPATH=/usr/share/i18n/locales/musl \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONFAULTHANDLER=1
 
+# hadolint ignore=DL3003
 RUN apk add --no-cache \
         libintl==0.21-r0 && \
     apk --no-cache add --virtual build-dependencies \
@@ -34,7 +35,7 @@ COPY --chown=hello:hello /api ./api
 COPY --chown=hello:hello Pipfile Pipfile
 ENV PATH="/home/hello/.local/bin:/home/hello/.venv/bin:${PATH}"
 
-RUN pip install --user pipenv && \
+RUN pip install --user --no-cache-dir pipenv==2022.4.21 && \
     PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
 
 # the below does not work. Nothing copied is actually visible within the runtime,
