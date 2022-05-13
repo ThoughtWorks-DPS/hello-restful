@@ -22,7 +22,7 @@ parameters:
   registry:
     description: publish to this registry
     type: string
-    default: ghcr.io
+    default: ghcr.io/ThoughtWorks-DPS
 
   # datadog-version:
   #   description: datadog cli version for all jobs
