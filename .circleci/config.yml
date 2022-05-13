@@ -59,7 +59,7 @@ workflows:
       - python/secure-image-build:
           name: secure-build
           context: << pipeline.parameters.context >>
-          #shell: << pipeline.parameters.shell-options >>
+          shell: /bin/bash -e pipefail
           python-version: "3.9.10"
           registry: << pipeline.parameters.registry >>
           image: hello-restful
