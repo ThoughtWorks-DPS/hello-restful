@@ -61,6 +61,12 @@ workflows:
           context: << pipeline.parameters.context >>
           shell: /bin/bash
           python-version: "3.9.10"
+          before-build:
+            - run:
+                name: inject environment variables
+                command: |
+                  secrethub inject -i secrethub.env -o $BASH_ENV
+                  source $BASH_ENV
           registry: << pipeline.parameters.registry >>
           image: hello-restful
           image-cve-scan: true
