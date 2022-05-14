@@ -1,6 +1,7 @@
 FROM python:3.9-alpine as builder
 
 LABEL maintainer=<nchenewe@thoughtworks.com>
+LABEL org.opencontainers.image.source https://github.com/ThoughtWorks-DPS/hello-restful
 
 ENV MUSL_LOCPATH=/usr/share/i18n/locales/musl \
     LANG="C.UTF-8" \

@@ -3,6 +3,7 @@ version: 2.1
 
 orbs:
   python: twdps/python-api@dev:latest
+  cosign: twdps/cosign@dev:latest
 
 # ==== global pipeline parameters
 
@@ -14,7 +15,7 @@ parameters:
   shell-options:
     description: shell options for all jobs
     type: string
-    default: secrethub run --env-file secrethub.env -- /bin/bash -eo pipefail
+    default: op run --env-file op.env -- /bin/bash -eo pipefail
   package-manager:
     description: python package manager
     type: string
@@ -65,7 +66,7 @@ workflows:
             - run:
                 name: inject environment variables
                 command: |
-                  secrethub inject -i secrethub.env -o $BASH_ENV
+                  op inject -i op.env -o $BASH_ENV
                   source $BASH_ENV
           registry: << pipeline.parameters.registry >>
           image: hello-restful
@@ -73,6 +74,9 @@ workflows:
           snyk-organization: twdps
           # health-url: "http://0.0.0.0:8000/v1/hello/healthz/"
           # port-definition: "8000:8000"
+          after-build:
+            - cosign/install
+            - cosign/sign:
           requires:
             - static-code-analysis
           filters: *on-push-main
