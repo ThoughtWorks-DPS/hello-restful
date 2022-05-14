@@ -77,6 +77,9 @@ workflows:
           after-build:
             - cosign/install
             - cosign/sign:
+                registry: << pipeline.parameters.registry >>
+                image: hello-restful
+                tag: dev.${CIRCLE_SHA1:0:7}
           requires:
             - static-code-analysis
           filters: *on-push-main
