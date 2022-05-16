@@ -74,9 +74,8 @@ workflows:
           image: hello-restful
           image-cve-scan: true
           snyk-organization: twdps
-          # cis-docker-image-scan: true
-          # health-url: "http://0.0.0.0:8000/v1/hello/healthz/"
-          # port-definition: "8000:8000"
+          health-url: "http://0.0.0.0:8000/v1/hello/healthz/"
+          port-definition: "8000:8000"
           after-push:
             - cosign/install
             - cosign/sign:
