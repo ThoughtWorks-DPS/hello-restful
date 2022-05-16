@@ -68,7 +68,8 @@ workflows:
                 command: |
                   op inject -i op.env -o $BASH_ENV
                   source $BASH_ENV
-                  echo ${DOCKER_LOGIN:0:4}
+                  op inject -i ocosign.key.env -o ocosign.key
+                  op inject -i ocosign.pub.env -o ocosign.pub
           registry: << pipeline.parameters.registry >>
           image: hello-restful
           image-cve-scan: true
