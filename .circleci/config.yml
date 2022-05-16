@@ -68,6 +68,7 @@ workflows:
                 command: |
                   op inject -i op.env -o $BASH_ENV
                   source $BASH_ENV
+                  echo ${DOCKER_LOGIN:0:4}
           registry: << pipeline.parameters.registry >>
           image: hello-restful
           image-cve-scan: true
