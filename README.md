@@ -14,7 +14,7 @@ See auto-generated fastAPI openapi documention for details.
 
 ## local developement
 
-**to run locally with uvicorn, not on k8s**  
+**to run locally with uvicorn**  
 
 ```
 $ uvicorn api.main:api --reload
