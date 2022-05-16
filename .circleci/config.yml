@@ -23,7 +23,7 @@ parameters:
   registry:
     description: publish to this registry
     type: string
-    default: ghcr.io/thoughtworks-dps/hello-restful
+    default: ghcr.io/thoughtworks-dps
 
   # datadog-version:
   #   description: datadog cli version for all jobs
