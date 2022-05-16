@@ -48,14 +48,14 @@ workflows:
   development-build:
     jobs:
       # - python/machine-clone-only
-      - python/static-analysis:
-          name: static-code-analysis
-          context: << pipeline.parameters.context >>
-          package-manager: << pipeline.parameters.package-manager >>
-          lint-path: api
-          report-coverage: codeclimate
-          cis-docker-image-scan: true
-          filters: *on-push-main
+      # - python/static-analysis:
+      #     name: static-code-analysis
+      #     context: << pipeline.parameters.context >>
+      #     package-manager: << pipeline.parameters.package-manager >>
+      #     lint-path: api
+      #     report-coverage: codeclimate
+      #     cis-docker-image-scan: true
+      #     filters: *on-push-main
 
       - python/secure-image-build:
           name: secure-build
@@ -80,6 +80,6 @@ workflows:
                 registry: << pipeline.parameters.registry >>
                 image: hello-restful
                 tag: dev.${CIRCLE_SHA1:0:7}
-          requires:
-            - static-code-analysis
+          # requires:
+          #   - static-code-analysis
           filters: *on-push-main
