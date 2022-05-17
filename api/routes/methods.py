@@ -62,7 +62,7 @@ resource_data = {
 
 route = APIRouter()
 
-@route.get("/resource/",
+@route.get("/resource",
            summary="Return a list of all resources",
            tags=["example resource"],
            status_code=status.HTTP_200_OK
@@ -104,7 +104,7 @@ def get_resource_userid(response: Response,
     # response with found set from resource_data
     return result[0]
 
-@route.post("/resource/",
+@route.post("/resource",
             summary="Create new resource",
             tags=["example resource"],
             status_code=status.HTTP_201_CREATED

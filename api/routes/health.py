@@ -11,7 +11,7 @@ from ..config import settings
 
 route = APIRouter()
 
-@route.get("/healthz/",
+@route.get("/healthz",
            summary="Simple service health check.",
            tags=["main"],
            status_code=status.HTTP_200_OK

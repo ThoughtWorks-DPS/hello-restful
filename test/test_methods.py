@@ -87,7 +87,7 @@ def test_resource_get_invalid_id():
     assert response.json() == { "detail": "Resource not found" }
 
 def test_resource_post_unique_email():
-    response = client.post("resource/",
+    response = client.post("resource",
                             json={
                             "first_name": "foo",
                             "last_name": "bar",
@@ -104,7 +104,7 @@ def test_resource_post_unique_email():
     }
 
 def test_resource_post_duplicate_email():
-    response = client.post("resource/",
+    response = client.post("resource",
                             json={
                             "first_name": "foo",
                             "last_name": "bar",
@@ -116,7 +116,7 @@ def test_resource_post_duplicate_email():
 
 # post: include fields in json payload that are not in the schema
 def test_resource_post_extra_data():
-    response = client.post("resource/",
+    response = client.post("resource",
                             json={
                             "first_name": "foo",
                             "last_name": "bar",
@@ -140,7 +140,7 @@ def test_resource_post_extra_data():
 
 # post: fail to include all required fields in json payload
 def test_resource_post_extra_data():
-    response = client.post("resource/",
+    response = client.post("resource",
                             json={
                             "first_name": "foo",
                             "last_name": "bar",
@@ -162,7 +162,7 @@ def test_resource_post_extra_data():
 
 # test model validators
 def test_resource_post_model_validators():
-    response = client.post("resource/",
+    response = client.post("resource",
                             json={
                             "first_name": "thishastoomanycharactersthishastoomanycharacters",
                             "last_name": "a",
