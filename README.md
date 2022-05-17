@@ -12,7 +12,7 @@
 
 See auto-generated fastAPI openapi documention for details.  
 
-## local developement
+## local developement  
 
 **run locally with uvicorn**  
 
