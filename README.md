@@ -4,15 +4,21 @@
     <br />
 		<img alt="DPS Title" src="https://raw.githubusercontent.com/ThoughtWorks-DPS/static/master/dps_lab_title.png" width=350/>
 	</p>
-  <h3>Lightweight RESTful API simulator and testing endpoint</h3>
+  <h3>Lightweight API providing request and response endpoints</h3>
   <h1>hello-restful</h1>
-  <a href="https://app.circleci.com/pipelines/github/ThoughtWorks-DPS/circleci-remote-docker"><img src="https://circleci.com/gh/ThoughtWorks-DPS/circleci-remote-docker.svg?style=shield"></a> <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/ThoughtWorks-DPS/circleci-remote-docker"></a>
+  <a href="https://app.circleci.com/pipelines/github/ThoughtWorks-DPS/hello-restful"><img src="https://circleci.com/gh/ThoughtWorks-DPS/hello-restful.svg?style=shield"></a> <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/ThoughtWorks-DPS/circleci-remote-docker"></a>
 </div>
 <br />
 
-See auto-generated fastAPI openapi documention for details.  
+hello-restful is a lightweight api designed to be deployed on a kubernetes-based delivey infrastructure and provide common http testing endpoints and demonstrate one ethod of using an openapi framework for automated api documentation.  
+
+To deploy in local cluster:  
+
+For a simple demo of the api features and documentation: `docker run -it -d -p 8000:8000 ghcr.io/thoughtworks-dps/hello-restful`.  
 
 ## local developement  
+
+**local cluster deployment**
 
 **run locally with uvicorn**  
 
