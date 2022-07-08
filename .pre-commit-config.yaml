@@ -9,6 +9,7 @@ repos:
       - id: check-json
       - id: check-yaml
         args: [--allow-multiple-documents]
+        exclude: ^chart/
       - id: forbid-new-submodules
       - id: detect-private-key
       - id: detect-aws-credentials

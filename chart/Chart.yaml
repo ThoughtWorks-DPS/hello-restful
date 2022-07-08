@@ -1,0 +1,5 @@
+apiVersion: v2
+name: hello-restful
+description: Helm chart for twdps hello-restful demo app
+type: application
+version: 0.1.0

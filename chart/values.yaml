@@ -1,0 +1,83 @@
+# Default values are based on local-platform-environment deployment.
+# See environment values files for remote deployed confniguration.
+
+nameOverride: ""
+fullnameOverride: ""
+
+appVersionOverride: "latest"
+
+serviceAccount:
+  create: true
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+
+service:
+  name: "http"
+  port: 8000
+  targetPort: 80
+
+virtualService:
+  create: true
+  hosts:
+    - "local.api.twdps.io"
+  gateways:
+    - "local-gateway"
+
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/thoughtworks-dps/hello-restful
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersionOverride.
+  tag: ""
+
+imagePullSecrets:
+  - name: regcred
+
+
+podAnnotations: {}
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+
+          # livenessProbe:
+          #   httpGet:
+          #     path: /v1/hello/healthz
+          #     port: {{ .Values.service.name | default "http" }}
+          # readinessProbe:
+          #   httpGet:
+          #     path: /v1/hello/healthz
+          #     port: {{ .Values.service.name | default "http" }}

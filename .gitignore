@@ -6,3 +6,4 @@ api/routes/__pycache__/
 test/__pycache__/
 .pyteset_cache/
 *.key
+dockerconfig.json

@@ -18,13 +18,11 @@ For a simple demo of the api features and documentation: `docker run -it -d -p 8
 
 ## local developement  
 
-**local cluster deployment**
-
 **run locally with uvicorn**  
 
 ```
 $ uvicorn api.main:api --reload
 ```
 
-Access on http://localhost/v1/hello  
-OAS documentation on http://localhost/v1/hello/apidocs  
+Access on http://localhost:8000/v1/hello  
+OAS documentation on http://localhost:8000/v1/hello/apidocs  
