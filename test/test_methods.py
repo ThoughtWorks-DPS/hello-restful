@@ -7,6 +7,7 @@ client = TestClient(api)
 client.base_url += route_prefix
 client.base_url = client.base_url.rstrip("/") + "/"
 
+
 def test_resource_get():
     response = client.get("resource")
     assert response.status_code == 200
@@ -43,6 +44,7 @@ def test_resource_get():
       ]
     }
 
+
 def test_resource_get_search_with_results():
     response = client.get("resource?last_name=San")
     assert response.status_code == 200
@@ -65,10 +67,12 @@ def test_resource_get_search_with_results():
       ]
     }
 
+
 def test_resource_get_search_with_no_results():
     response = client.get("resource?last_name=West")
     assert response.status_code == 404
     assert response.json() == { "message": "no search results" }
+
 
 def test_resource_get_valid_id():
     response = client.get("resource/101444")
@@ -81,14 +85,16 @@ def test_resource_get_valid_id():
       "userid": 101444
     }
 
+
 def test_resource_get_invalid_id():
     response = client.get("resource/101000")
     assert response.status_code == 404
     assert response.json() == { "detail": "Resource not found" }
 
+
 def test_resource_post_unique_email():
     response = client.post("resource",
-                            json={
+                           json={
                             "first_name": "foo",
                             "last_name": "bar",
                             "email": "foo@example.com",
@@ -103,21 +109,23 @@ def test_resource_post_unique_email():
       "userid": 509612
     }
 
+
 def test_resource_post_duplicate_email():
     response = client.post("resource",
-                            json={
+                           json={
                             "first_name": "foo",
                             "last_name": "bar",
                             "email": "maria@example.com",
                             "position": "staff"
-                          })
+                           })
     assert response.status_code == 403
-    assert response.json() == { "detail": "supplied email is already in use." }
+    assert response.json() == {"detail": "supplied email is already in use."}
+
 
 # post: include fields in json payload that are not in the schema
 def test_resource_post_extra_data():
     response = client.post("resource",
-                            json={
+                           json={
                             "first_name": "foo",
                             "last_name": "bar",
                             "email": "foo@example.com",
@@ -138,14 +146,15 @@ def test_resource_post_extra_data():
       ]
     }
 
+
 # post: fail to include all required fields in json payload
 def test_resource_post_extra_data():
     response = client.post("resource",
-                            json={
+                           json={
                             "first_name": "foo",
                             "last_name": "bar",
                             "email": "foo@example.com"
-                          })
+                           })
     assert response.status_code == 422
     assert response.json() == {
       "detail": [
@@ -160,10 +169,11 @@ def test_resource_post_extra_data():
       ]
     }
 
+
 # test model validators
 def test_resource_post_model_validators():
     response = client.post("resource",
-                            json={
+                          json={
                             "first_name": "thishastoomanycharactersthishastoomanycharacters",
                             "last_name": "a",
                             "email": "foo@example",
@@ -216,9 +226,10 @@ def test_resource_post_model_validators():
       ]
     }
 
+
 def test_resource_put_valid_id():
     response = client.put("resource/101444",
-                            json={
+                          json={
                             "first_name": "foo",
                             "last_name": "bar",
                             "email": "foo@example.com",
@@ -233,21 +244,23 @@ def test_resource_put_valid_id():
       "userid": 101444
     }
 
+
 def test_resource_put_invalid_id():
     response = client.put("resource/101400",
-                            json={
+                          json={
                             "first_name": "foo",
                             "last_name": "bar",
                             "email": "foo@example.com",
                             "position": "staff"
                           })
     assert response.status_code == 404
-    assert response.json() == { "detail": "Resource not found" }
+    assert response.json() == {"detail": "Resource not found"}
+
 
 # put: fail to include required fields, include extra fields in json payload
 def test_resource_put_extra_and_missing_fields():
     response = client.put("resource/101444",
-                            json={
+                          json={
                             "last_name": "bar",
                             "email": "foo@example.com",
                             "extra": "extra data"
@@ -282,11 +295,12 @@ def test_resource_put_extra_and_missing_fields():
       ]
     }
 
+
 def test_resource_patch_valid_id():
     response = client.patch("resource/101444",
                             json={
-                            "position": "manager"
-                          })
+                              "position": "manager"
+                            })
     assert response.status_code == 200
     assert response.json() == {
       "first_name": "Maria",
@@ -296,20 +310,22 @@ def test_resource_patch_valid_id():
       "userid": 101444
     }
 
+
 def test_resource_patch_invalid_id():
     response = client.patch("resource/101400",
                             json={
-                            "position": "manager"
-                          })
+                              "position": "manager"
+                            })
     assert response.status_code == 404
-    assert response.json() == { "detail": "Resource not found" }
+    assert response.json() == {"detail": "Resource not found"}
+
 
 # patch:  include fields in json payload that are not in the schema
 def test_resource_patch_extra_data():
     response = client.patch("resource/101444",
                             json={
-                            "position": "manager",
-                            "extra": "some extra data"
+                              "position": "manager",
+                              "extra": "some extra data"
                           })
     assert response.status_code == 422
     assert response.json() == {
@@ -325,12 +341,14 @@ def test_resource_patch_extra_data():
       ]
     }
 
+
 def test_resource_delete_valid_id():
     response = client.delete("resource/101444")
     assert response.status_code == 204
     assert response.json() == {}
 
+
 def test_resource_delete_invalid_id():
     response = client.delete("resource/101400")
     assert response.status_code == 404
-    assert response.json() == { "detail": "Resource not found" }
+    assert response.json() == {"detail": "Resource not found"}
