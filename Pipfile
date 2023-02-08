@@ -15,6 +15,7 @@ requests = "2.27.1"
 pylint = "2.13.9"
 coverage = "6.3.3"
 pre-commit = "2.19.0"
+httpx = "0.23.3"
 
 [requires]
 python_version = "3.9"
