@@ -4,8 +4,7 @@ from api.main import api
 from api.config import route_prefix
 
 client = TestClient(api)
-client.base_url += route_prefix
-client.base_url = client.base_url.rstrip("/") + "/"
+client.base_url = client.base_url.join(route_prefix.rstrip("/") + "/")
 
 
 # missing format inspection tests
