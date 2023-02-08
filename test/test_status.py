@@ -40,7 +40,7 @@ def test_status_code_patch_200():
 def test_status_code_delete_204():
     response = client.delete("status/204")
     assert response.status_code == 204
-    assert response.json() == {"code": 204}
+    assert response.content == b''
 
 
 def test_status_code_delete_404():

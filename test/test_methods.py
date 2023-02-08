@@ -344,7 +344,7 @@ def test_resource_patch_extra_data():
 def test_resource_delete_valid_id():
     response = client.delete("resource/101444")
     assert response.status_code == 204
-    assert response.json() == {}
+    assert response.content == b''
 
 
 def test_resource_delete_invalid_id():
