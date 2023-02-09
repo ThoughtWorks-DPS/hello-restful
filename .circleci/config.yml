@@ -2,7 +2,7 @@
 version: 2.1
 
 orbs:
-  python: twdps/python-api@0.1.0
+  python: twdps/python-api@0.2.0
   cosign: twdps/cosign@0.1.0
 
 # ==== global pipeline parameters
@@ -52,12 +52,10 @@ workflows:
           name: static-code-analysis
           context: << pipeline.parameters.context >>
           package-manager: << pipeline.parameters.package-manager >>
-          shell: op run --env-file op.env -- /bin/bash -eo pipefail
           install-dev: true
           lint-path: api
           report-coverage: codeclimate
           cis-docker-image-scan: true
-          executor-image: twdps/circleci-python-builder:0.2.0
           filters: *on-push-main
 
       - python/secure-image-build:
