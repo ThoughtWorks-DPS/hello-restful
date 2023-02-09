@@ -51,6 +51,7 @@ workflows:
       - python/static-analysis:
           name: static-code-analysis
           context: << pipeline.parameters.context >>
+          shell: << pipeline.parameters.shell-options >>
           package-manager: << pipeline.parameters.package-manager >>
           install-dev: true
           lint-path: api
