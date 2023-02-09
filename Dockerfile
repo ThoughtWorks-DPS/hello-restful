@@ -12,15 +12,15 @@ ENV MUSL_LOCPATH=/usr/share/i18n/locales/musl \
 
 # hadolint ignore=DL3003
 RUN apk add --no-cache \
-        libintl==0.21-r0 && \
+        libintl==0.21.1-r1 && \
     apk --no-cache add --virtual build-dependencies \
-        cmake==3.21.3-r0 \
-        make==4.3-r0 \
-        musl==1.2.2-r7 \
-        musl-dev==1.2.2-r7 \
-        musl-utils==1.2.2-r7 \
-        gcc==10.3.1_git20211027-r0 \
-        gettext-dev==0.21-r0 && \
+        cmake==3.24.3-r0 \
+        make==4.3-r1 \
+        musl==1.2.3-r4 \
+        musl-dev==1.2.3-r4 \
+        musl-utils==1.2.3-r4 \
+        gcc==12.2.1_git20220924-r4 \
+        gettext-dev==0.21.1-r1 && \
     wget -q https://gitlab.com/rilian-la-te/musl-locales/-/archive/master/musl-locales-master.zip && \
     unzip musl-locales-master.zip && cd musl-locales-master && \
     cmake -DLOCALE_PROFILE=OFF -D CMAKE_INSTALL_PREFIX:PATH=/usr . && \
