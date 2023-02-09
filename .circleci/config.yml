@@ -52,6 +52,7 @@ workflows:
           name: static-code-analysis
           context: << pipeline.parameters.context >>
           package-manager: << pipeline.parameters.package-manager >>
+          shell: op run --env-file op.env -- /bin/bash -eo pipefail
           install-dev: true
           lint-path: api
           report-coverage: codeclimate
