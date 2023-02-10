@@ -2,7 +2,7 @@
 version: 2.1
 
 orbs:
-  python: twdps/python-api@0.2.0
+  python: twdps/python-api@0.3.0
   cosign: twdps/cosign@0.1.0
 
 # ==== global pipeline parameters
