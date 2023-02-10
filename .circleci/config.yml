@@ -75,6 +75,7 @@ workflows:
           registry: << pipeline.parameters.registry >>
           image: hello-restful
           image-cve-scan: true
+          severity-threshold: medium
           snyk-organization: twdps
           health-url: "http://0.0.0.0:8000/v1/hello/healthz"
           port-definition: "8000:8000"
