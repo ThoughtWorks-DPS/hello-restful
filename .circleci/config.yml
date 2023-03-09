@@ -74,7 +74,7 @@ workflows:
           lint-path: api
           report-coverage: codeclimate
           cis-docker-image-scan: true
-          filters: *on-push-main
+          filters: *on-tag-main
 
       - python/secure-image-build:
           name: secure-build
@@ -104,10 +104,10 @@ workflows:
                 tag: dev.${CIRCLE_SHA1:0:7}
           requires:
             - static-code-analysis
-          filters: *on-push-main
+          filters: *on-tag-main
 
   publish-to-registry:
     jobs:
       - tag-and-publish:
           context: << pipeline.parameters.context >>
-          filters: *on-tag-main
+          filters: *on-push-main
