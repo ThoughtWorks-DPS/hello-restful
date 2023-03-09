@@ -42,12 +42,32 @@ on-tag-main: &on-tag-main
   tags:
     only: /.*/
 
+jobs:
+  tag-and-publish:
+    docker:
+      - image: twdps/circleci-python-builder:stable
+    environment:
+      - IMAGE_REPOSITORY: ghcr.io/thoughtworks-dps
+      - IMAGE_NAME: hello-restful
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run:
+          name: export registry credentials
+          command: << pipeline.parameters.shell-options >>
+      - python/confirm-registry
+      - run:
+          name: publish tagged docker image to Github Packages
+          command: |
+            docker pull $IMAGE_REPOSITORY/$IMAGE_NAME:${CIRCLE_SHA1:0:7}
+            docker tag $IMAGE_REPOSITORY/$IMAGE_NAME:${CIRCLE_SHA1:0:7} $IMAGE_REPOSITORY/$IMAGE_NAME:$CIRCLE_TAG
+
+
 workflows:
   version: 2
 
   development-build:
     jobs:
-      # - python/machine-clone-only
       - python/static-analysis:
           name: static-code-analysis
           context: << pipeline.parameters.context >>
@@ -88,3 +108,8 @@ workflows:
           requires:
             - static-code-analysis
           filters: *on-push-main
+
+  tag-image:
+    jobs:
+      - tag-and-publish:
+          filters: *on-tag-main
