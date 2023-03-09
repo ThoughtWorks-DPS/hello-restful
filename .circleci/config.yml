@@ -54,9 +54,8 @@ jobs:
       - checkout
       - run:
           name: publish tagged docker image to Github Packages
-          shell: << pipeline.parameters.shell-options >>
           command: |
-            echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_LOGIN} --password-stdin docker.io
+            op run --env-file op.env -- echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_LOGIN} --password-stdin docker.io
             docker pull $IMAGE_REPOSITORY/$IMAGE_NAME:${CIRCLE_SHA1:0:7}
             docker tag $IMAGE_REPOSITORY/$IMAGE_NAME:${CIRCLE_SHA1:0:7} $IMAGE_REPOSITORY/$IMAGE_NAME:$CIRCLE_TAG
 
