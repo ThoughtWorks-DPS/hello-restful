@@ -55,9 +55,13 @@ jobs:
       - run:
           name: publish tagged docker image to Github Packages
           command: |
-            op run --env-file op.env -- echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_LOGIN} --password-stdin docker.io
-            docker pull $IMAGE_REPOSITORY/$IMAGE_NAME:${CIRCLE_SHA1:0:7}
-            docker tag $IMAGE_REPOSITORY/$IMAGE_NAME:${CIRCLE_SHA1:0:7} $IMAGE_REPOSITORY/$IMAGE_NAME:$CIRCLE_TAG
+            source op.env
+            export DOCKER_PASSWORD=$(op read $DOCKER_PASSWORD)
+            export DOCKER_LOGIN=$(op read $DOCKER_LOGIN)
+            echo $DOCKER_PASSWORD | docker login ghcr.io -u $DOCKER_LOGIN --password-stdin
+            docker pull $IMAGE_REPOSITORY/$IMAGE_NAME:dev.${CIRCLE_SHA1:0:7}
+            docker tag $IMAGE_REPOSITORY/$IMAGE_NAME:dev.${CIRCLE_SHA1:0:7} $IMAGE_REPOSITORY/$IMAGE_NAME:$CIRCLE_TAG
+            docker push $IMAGE_REPOSITORY/$IMAGE_NAME:$CIRCLE_TAG
 
 
 workflows:
@@ -74,7 +78,7 @@ workflows:
           lint-path: api
           report-coverage: codeclimate
           cis-docker-image-scan: true
-          filters: *on-tag-main
+          filters: *on-push-main
 
       - python/secure-image-build:
           name: secure-build
@@ -104,10 +108,10 @@ workflows:
                 tag: dev.${CIRCLE_SHA1:0:7}
           requires:
             - static-code-analysis
-          filters: *on-tag-main
+          filters: *on-push-main
 
   publish-to-registry:
     jobs:
       - tag-and-publish:
           context: << pipeline.parameters.context >>
-          filters: *on-push-main
+          filters: *on-tag-main
