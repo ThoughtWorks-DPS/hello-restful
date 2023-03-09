@@ -24,7 +24,7 @@ async def get_server_locality(response: Response):
     """
     try:
         response.status_code = status.HTTP_200_OK
-        server_response = requests.get(settings.server_info_url)
+        server_response = requests.get(settings.server_info_url, timeout=10)
         json_response = json.loads(server_response.content)
         locality = json_response['node']['locality']
         return locality
