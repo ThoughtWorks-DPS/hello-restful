@@ -109,7 +109,8 @@ workflows:
             - static-code-analysis
           filters: *on-push-main
 
-  tag-image:
+  publish-to-registry:
     jobs:
       - tag-and-publish:
+          context: << pipeline.parameters.context >>
           filters: *on-tag-main
