@@ -28,6 +28,7 @@ class Settings(BaseSettings):
     debug: bool = False
     releaseId: str = "0.0.0" # os.environ.get("API_VERSION")
     version: str = "v1"
+    server_info_url: str = "http://localhost:15000/server_info"
 
 settings = Settings()
 route_prefix = f"/{settings.version}{settings.prefix}"

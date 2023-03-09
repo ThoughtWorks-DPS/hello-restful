@@ -7,3 +7,4 @@ test/__pycache__/
 .pyteset_cache/
 *.key
 dockerconfig.json
+.venv
