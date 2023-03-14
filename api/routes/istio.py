@@ -13,21 +13,21 @@ from api.config import settings
 route = APIRouter()
 
 
-@route.get("/server/locality",
-           summary="Return server locality",
-           tags=["server"],
+@route.get("/istio/envoy",
+           summary="Return envoy metadata",
+           tags=["istio"],
            status_code=status.HTTP_200_OK
            )
-async def get_server_locality(response: Response):
+async def get_envoy_metadata(response: Response):
     """
-    Returns locality of server as determined from underlying platform (assumes istio sidecar)
+    Returns metadata queried from istio envoy sidecar
     """
     try:
         response.status_code = status.HTTP_200_OK
         server_response = requests.get(settings.server_info_url, timeout=10)
         json_response = json.loads(server_response.content)
         locality = json_response['node']['locality']
-        return locality
+        return {"locality": locality}
     except requests.exceptions.ConnectionError:
         response.status_code = status.HTTP_502_BAD_GATEWAY
         return {

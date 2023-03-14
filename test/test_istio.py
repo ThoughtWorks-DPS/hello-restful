@@ -12,15 +12,15 @@ client.base_url = client.base_url.join(route_prefix.rstrip("/") + "/")
 
 
 @patch('requests.get')
-def test_server_locality_returns_502_when_endpoint_unreachable(mock_server_response):
+def test_istio_envoy_returns_502_when_endpoint_unreachable(mock_server_response):
     mock_server_response.side_effect = requests.exceptions.ConnectionError
-    response = client.get("server/locality")
+    response = client.get("istio/envoy")
     assert response.status_code == 502
     assert response.json() == {"message": "Unable to query server information"}
 
 
 @patch('requests.get')
-def test_server_locality_returns_200_when_endpoint_reachable(mock_server_response):
+def test_istio_envoy_returns_200_when_endpoint_reachable(mock_server_response):
     locality_info = {
         "region": "us-region-2",
         "zone": "us-region-2c",
@@ -36,6 +36,6 @@ def test_server_locality_returns_200_when_endpoint_reachable(mock_server_respons
     json_response = json.dumps(server_info)
     mock_server_response.return_value.content = json_response
 
-    response = client.get("server/locality")
+    response = client.get("istio/envoy")
     assert response.status_code == 200
-    assert response.json() == locality_info
+    assert response.json() == {"locality": locality_info}
