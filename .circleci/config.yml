@@ -11,25 +11,13 @@ globals:
   - &context twdps-core-labs-team
   - &shell-options op run --env-file op.env -- /bin/bash -eo pipefail
   - &package-manager pipenv
-  - &registry ghcr.io/thoughtworks-dps
+#  - &registry ghcr.io/thoughtworks-dps
 
-# parameters:
-#   context:
-#     description: circleci context for all jobs
-#     type: string
-#     default: twdps-core-labs-team
-#   shell-options:
-#     description: shell options for all jobs
-#     type: string
-#     default: op run --env-file op.env -- /bin/bash -eo pipefail
-#   package-manager:
-#     description: python package manager
-#     type: string
-#     default: pipenv
-#   registry:
-#     description: publish to this registry
-#     type: string
-#     default: ghcr.io/thoughtworks-dps
+parameters:
+  registry:
+    description: publish to this registry
+    type: string
+    default: ghcr.io/thoughtworks-dps
 
   # datadog-version:
   #   description: datadog cli version for all jobs
