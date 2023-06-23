@@ -2,28 +2,34 @@
 version: 2.1
 
 orbs:
-  python: twdps/python-api@0.3.0
+  python: twdps/python-api@dev:latest
   cosign: twdps/cosign@0.1.0
 
 # ==== global pipeline parameters
 
-parameters:
-  context:
-    description: circleci context for all jobs
-    type: string
-    default: twdps-core-labs-team
-  shell-options:
-    description: shell options for all jobs
-    type: string
-    default: op run --env-file op.env -- /bin/bash -eo pipefail
-  package-manager:
-    description: python package manager
-    type: string
-    default: pipenv
-  registry:
-    description: publish to this registry
-    type: string
-    default: ghcr.io/thoughtworks-dps
+globals:
+  - &context twdps-core-labs-team
+  - &shell-options op run --env-file op.env -- /bin/bash -eo pipefail
+  - &package-manager pip
+  - &registry ghcr.io/thoughtworks-dps
+
+# parameters:
+#   context:
+#     description: circleci context for all jobs
+#     type: string
+#     default: twdps-core-labs-team
+#   shell-options:
+#     description: shell options for all jobs
+#     type: string
+#     default: op run --env-file op.env -- /bin/bash -eo pipefail
+#   package-manager:
+#     description: python package manager
+#     type: string
+#     default: pipenv
+#   registry:
+#     description: publish to this registry
+#     type: string
+#     default: ghcr.io/thoughtworks-dps
 
   # datadog-version:
   #   description: datadog cli version for all jobs
@@ -42,26 +48,26 @@ on-tag-main: &on-tag-main
   tags:
     only: /.*/
 
-jobs:
-  tag-and-publish:
-    docker:
-      - image: twdps/circleci-python-builder:stable
-    environment:
-      - IMAGE_REPOSITORY: ghcr.io/thoughtworks-dps
-      - IMAGE_NAME: hello-restful
-    steps:
-      - setup_remote_docker
-      - checkout
-      - run:
-          name: publish tagged docker image to Github Packages
-          command: |
-            source op.env
-            export DOCKER_PASSWORD=$(op read $DOCKER_PASSWORD)
-            export DOCKER_LOGIN=$(op read $DOCKER_LOGIN)
-            echo $DOCKER_PASSWORD | docker login ghcr.io -u $DOCKER_LOGIN --password-stdin
-            docker pull $IMAGE_REPOSITORY/$IMAGE_NAME:dev.${CIRCLE_SHA1:0:7}
-            docker tag $IMAGE_REPOSITORY/$IMAGE_NAME:dev.${CIRCLE_SHA1:0:7} $IMAGE_REPOSITORY/$IMAGE_NAME:$CIRCLE_TAG
-            docker push $IMAGE_REPOSITORY/$IMAGE_NAME:$CIRCLE_TAG
+# jobs:
+#   tag-and-publish:
+#     docker:
+#       - image: twdps/circleci-python-builder:stable
+#     environment:
+#       - IMAGE_REPOSITORY: ghcr.io/thoughtworks-dps
+#       - IMAGE_NAME: hello-restful
+#     steps:
+#       - setup_remote_docker
+#       - checkout
+#       - run:
+#           name: publish tagged docker image to Github Packages
+#           command: |
+#             source op.env
+#             export DOCKER_PASSWORD=$(op read $DOCKER_PASSWORD)
+#             export DOCKER_LOGIN=$(op read $DOCKER_LOGIN)
+#             echo $DOCKER_PASSWORD | docker login ghcr.io -u $DOCKER_LOGIN --password-stdin
+#             docker pull $IMAGE_REPOSITORY/$IMAGE_NAME:dev.${CIRCLE_SHA1:0:7}
+#             docker tag $IMAGE_REPOSITORY/$IMAGE_NAME:dev.${CIRCLE_SHA1:0:7} $IMAGE_REPOSITORY/$IMAGE_NAME:$CIRCLE_TAG
+#             docker push $IMAGE_REPOSITORY/$IMAGE_NAME:$CIRCLE_TAG
 
 
 workflows:
@@ -71,47 +77,47 @@ workflows:
     jobs:
       - python/static-analysis:
           name: static-code-analysis
-          context: << pipeline.parameters.context >>
-          shell: << pipeline.parameters.shell-options >>
-          package-manager: << pipeline.parameters.package-manager >>
+          context: *context
+          shell: *shell-options
+          package-manager: *package-manager
           install-dev: true
           lint-path: api
           report-coverage: codeclimate
           cis-docker-image-scan: true
           filters: *on-push-main
 
-      - python/secure-image-build:
-          name: secure-build
-          context: << pipeline.parameters.context >>
-          shell: /bin/bash
-          python-version: "3.9.10"
-          before-build:
-            - run:
-                name: inject environment variables
-                command: |
-                  op inject -i op.env -o $BASH_ENV
-                  source $BASH_ENV
-                  op inject -i cosign.key.env -o cosign.key
-                  op inject -i cosign.pub.env -o cosign.pub
-          registry: << pipeline.parameters.registry >>
-          image: hello-restful
-          image-cve-scan: true
-          severity-threshold: medium
-          snyk-organization: twdps
-          health-url: "http://0.0.0.0:8000/v1/hello/healthz"
-          port-definition: "8000:8000"
-          after-push:
-            - cosign/install
-            - cosign/sign:
-                registry: << pipeline.parameters.registry >>
-                image: hello-restful
-                tag: dev.${CIRCLE_SHA1:0:7}
-          requires:
-            - static-code-analysis
-          filters: *on-push-main
+  #     - python/secure-image-build:
+  #         name: secure-build
+  #         context: << pipeline.parameters.context >>
+  #         shell: /bin/bash
+  #         python-version: "3.9.10"
+  #         before-build:
+  #           - run:
+  #               name: inject environment variables
+  #               command: |
+  #                 op inject -i op.env -o $BASH_ENV
+  #                 source $BASH_ENV
+  #                 op inject -i cosign.key.env -o cosign.key
+  #                 op inject -i cosign.pub.env -o cosign.pub
+  #         registry: << pipeline.parameters.registry >>
+  #         image: hello-restful
+  #         image-cve-scan: true
+  #         severity-threshold: medium
+  #         snyk-organization: twdps
+  #         health-url: "http://0.0.0.0:8000/v1/hello/healthz"
+  #         port-definition: "8000:8000"
+  #         after-push:
+  #           - cosign/install
+  #           - cosign/sign:
+  #               registry: << pipeline.parameters.registry >>
+  #               image: hello-restful
+  #               tag: dev.${CIRCLE_SHA1:0:7}
+  #         requires:
+  #           - static-code-analysis
+  #         filters: *on-push-main
 
-  publish-to-registry:
-    jobs:
-      - tag-and-publish:
-          context: << pipeline.parameters.context >>
-          filters: *on-tag-main
+  # publish-to-registry:
+  #   jobs:
+  #     - tag-and-publish:
+  #         context: << pipeline.parameters.context >>
+  #         filters: *on-tag-main

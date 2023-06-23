@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "chart.name" -}}
+{{- define "hello-restful.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "chart.fullname" -}}
+{{- define "hello-restful.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,44 +26,37 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "chart.chart" -}}
+{{- define "hello-restful.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
-Create delpoyed version as used by Common labels.
-*/}}
-{{- define "chart.deployedVersion" -}}
-{{- default .Chart.AppVersion .Values.appVersionOverride  | trunc 63 | trimSuffix "-" }}
-{{- end }}
-
-
-{{/*
 Common labels
 */}}
-{{- define "chart.labels" -}}
-app: {{ include "chart.name" . }}
-version: {{ include "chart.deployedVersion" . }}
-helm.sh/chart: {{ include "chart.chart" . }}
-{{ include "chart.selectorLabels" . }}
-app.kubernetes.io/version: {{ include "chart.deployedVersion" . }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- define "hello-restful.labels" -}}
+app: {{ include "hello-restful.name" . }}
+version: {{ .Values.image.tag }}
+env: {{ .Release.Namespace }}
+helm.sh/chart: {{ include "hello-restful.chart" . }}
+{{ include "hello-restful.selectorLabels" . }}
 {{- end }}
 
 {{/*
 Selector labels
 */}}
-{{- define "chart.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "chart.name" . }}
+{{- define "hello-restful.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "hello-restful.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/version: {{ .Values.image.tag }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "chart.serviceAccountName" -}}
+{{- define "hello-restful.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "chart.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "hello-restful.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}

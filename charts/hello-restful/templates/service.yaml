@@ -1,10 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "chart.fullname" . }}
+  name: {{ include "hello-restful.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "chart.labels" . | nindent 4 }}
+    {{- include "hello-restful.labels" . | nindent 4 }}
 spec:
+  type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port | default 80 }}
       targetPort: {{ .Values.service.targetPort | default "http" }}
@@ -13,4 +15,4 @@ spec:
       name: {{ .Values.service.name }}
       {{- end }}
   selector:
-    {{- include "chart.selectorLabels" . | nindent 4 }}
+    {{- include "hello-restful.selectorLabels" . | nindent 4 }}

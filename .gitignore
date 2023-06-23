@@ -8,3 +8,5 @@ test/__pycache__/
 *.key
 dockerconfig.json
 .venv
+source.env
+kubeconfig

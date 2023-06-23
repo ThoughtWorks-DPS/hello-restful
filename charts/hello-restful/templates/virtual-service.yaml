@@ -2,9 +2,10 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: {{ include "chart.fullname" . }}
+  name: {{ include "hello-restful.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "chart.labels" . | nindent 4 }}
+    {{- include "hello-restful.labels" . | nindent 4 }}
 spec:
   hosts:
     {{- toYaml .Values.virtualService.hosts | nindent 4 }}
@@ -13,7 +14,7 @@ spec:
   http:
     - route:
       - destination:
-          host: {{ include "chart.fullname" . }}
+          host: {{ include "hello-restful.fullname" . }}
           port:
             number: {{ .Values.service.port | default 80 }}
 {{- end }}

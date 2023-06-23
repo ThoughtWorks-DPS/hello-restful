@@ -15,16 +15,17 @@ serviceAccount:
 
 
 service:
-  name: "http"
+  type: ClusterIP
+  name: http
   port: 8000
   targetPort: 80
 
 virtualService:
   create: true
   hosts:
-    - "local.api.twdps.io"
+    - hello.dev.twdps.io
   gateways:
-    - "local-gateway"
+    - istio-system/dev-twdps-io-gateway
 
 
 replicaCount: 1
@@ -33,13 +34,13 @@ image:
   repository: ghcr.io/thoughtworks-dps/hello-restful
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersionOverride.
-  tag: ""
+  tag: "0.2.0"
 
 imagePullSecrets:
   - name: regcred
 
 
-podAnnotations: {}
+
 podSecurityContext: {}
   # fsGroup: 2000
 
