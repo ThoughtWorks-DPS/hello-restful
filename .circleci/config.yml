@@ -10,7 +10,7 @@ orbs:
 globals:
   - &context twdps-core-labs-team
   - &shell-options op run --env-file op.env -- /bin/bash -eo pipefail
-  - &package-manager pip
+  - &package-manager pipenv
   - &registry ghcr.io/thoughtworks-dps
 
 # parameters:
