@@ -22,8 +22,8 @@ async def get_healthz():
     """
     return {
       "status": "ok",
-      "version": settings.version,
-      "releaseId": settings.releaseId,
+      "api": settings.version,
+      "version": settings.releaseId,
       "description": "health of hello-restful service",
       "time": datetime.now().isoformat()
     }

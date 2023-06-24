@@ -100,6 +100,7 @@ workflows:
           snyk-organization: twdps
           health-url: "http://0.0.0.0:8000/v1/hello/healthz"
           port-definition: "8000:8000"
+          docker-run-arguments: "-e API_VERSION=dev.${CIRCLE_SHA1:0:7}"
           after-push:
             - cosign/install
             - cosign/sign:
