@@ -27,6 +27,9 @@ spec:
             - name: {{ .Values.service.name | default "http" }}
               containerPort: {{ .Values.service.targetPort | default 80 }}
               protocol: {{ .Values.service.protocol | default "TCP" }}
+          env:
+            - name: API_VERSION
+              value: {{ .Values.image.tag }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
