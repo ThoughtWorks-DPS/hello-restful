@@ -72,6 +72,10 @@ workflows:
           lint-path: api
           report-coverage: codeclimate
           cis-docker-image-scan: true
+          after-checkout:
+            - run:
+                name: test
+                command: export API_VERSION=dev.${CIRCLE_SHA1:0:7}
           filters: *on-push-main
 
       - python/secure-image-build:
