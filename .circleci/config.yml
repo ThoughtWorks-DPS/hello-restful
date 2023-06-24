@@ -74,8 +74,10 @@ workflows:
           cis-docker-image-scan: true
           after-checkout:
             - run:
-                name: test
-                command: export API_VERSION=dev.${CIRCLE_SHA1:0:7}
+                name: set API_VERSION
+                command: |
+                  echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
+                  source $BASH_ENV
           filters: *on-push-main
 
       - python/secure-image-build:
@@ -87,12 +89,10 @@ workflows:
                 name: inject environment variables
                 command: |
                   op inject -i op.env -o $BASH_ENV
+                  echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
                   source $BASH_ENV
                   op inject -i cosign.key.env -o cosign.key
                   op inject -i cosign.pub.env -o cosign.pub
-            - run:
-                name: test
-                command: export API_VERSION=dev.${CIRCLE_SHA1:0:7}
           registry: *registry
           image: hello-restful
           image-cve-scan: true
