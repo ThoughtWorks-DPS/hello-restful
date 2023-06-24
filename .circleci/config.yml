@@ -86,6 +86,9 @@ workflows:
                   source $BASH_ENV
                   op inject -i cosign.key.env -o cosign.key
                   op inject -i cosign.pub.env -o cosign.pub
+            - run:
+                name: setup API_VERSION
+                commamd: export API_VERSION=dev.${CIRCLE_SHA1:0:7}
           registry: *registry
           image: hello-restful
           image-cve-scan: true
