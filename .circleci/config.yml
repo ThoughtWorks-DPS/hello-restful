@@ -36,7 +36,40 @@ on-tag-main: &on-tag-main
   tags:
     only: /.*/
 
-# jobs:
+jobs:
+
+  deploy-hello-restful:
+    parameters:
+      cluster:
+        description: target cluster
+        type: string
+      namespace:
+        description: deploy to this namespace
+        type: string
+      tag:
+        description: image to deploy
+        type: string
+    docker:
+      - image: twdps/circleci-kube-ops:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: set environment
+          command: |
+            op inject -i op.env -o $BASH_ENV
+            source $BASH_ENV
+            mkdir -p ~/.kube
+            ENV=<< parameters.cluster >> op inject -i tpl/kubeconfig.tpl -o ~/.kube/config
+      - run:
+          name: deploy hello-restful
+          command: |
+            helm upgrade hello-restful charts/hello-restful \
+                 --install \
+                 -n << parameters.namespace>> \
+                 --values charts/hello-restful/values.yaml
+                 --set image.tag=dev.${CIRCLE_SHA1:0:7}
+
 #   tag-and-publish:
 #     docker:
 #       - image: twdps/circleci-python-builder:stable
@@ -109,6 +142,16 @@ workflows:
                 tag: dev.${CIRCLE_SHA1:0:7}
           requires:
             - static-code-analysis
+          filters: *on-push-main
+
+      - deploy-hello-restful:
+          name: dev deployment
+          cluster: platform-prod-us-east-1
+          namespace: demo-dev
+          tag: dev.${CIRCLE_SHA1:0:7}
+          context: *context
+          requires:
+            - secure-build
           filters: *on-push-main
 
   # publish-to-registry:

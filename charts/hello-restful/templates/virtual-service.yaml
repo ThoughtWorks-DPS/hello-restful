@@ -12,7 +12,11 @@ spec:
   gateways:
     {{- toYaml .Values.virtualService.gateways | nindent 4 }}
   http:
-    - route:
+    - name: {{ include "hello-restful.fullname" . }}-route
+      match:
+        - uri:
+            prefix: {{ .Values.virtualService.match }}
+      route:
       - destination:
           host: {{ include "hello-restful.fullname" . }}
           port:

@@ -15,15 +15,16 @@ serviceAccount:
 service:
   type: ClusterIP
   name: http
-  port: 8000
+  port: 80
   targetPort: 8000
 
 virtualService:
   create: true
   hosts:
-    - hello.dev.twdps.io
+    - dev.twdps.io
   gateways:
     - istio-system/dev-twdps-io-gateway
+  match: /v1/hello
 
 
 replicaCount: 1
@@ -32,7 +33,7 @@ image:
   repository: ghcr.io/thoughtworks-dps/hello-restful
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersionOverride.
-  tag: "dev.f025717"
+  tag: ""
 
 imagePullSecrets:
   - name: regcred
@@ -60,8 +61,8 @@ resources: {}
 
 autoscaling:
   enabled: false
-  minReplicas: 1
-  maxReplicas: 3
+  minReplicas: 3
+  maxReplicas: 5
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
