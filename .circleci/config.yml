@@ -78,7 +78,7 @@ workflows:
           name: secure-build
           context: *context
           shell: /bin/bash
-          python-version: "3.11.3"
+          python-version: "3.11"
           before-build:
             - run:
                 name: inject environment variables
