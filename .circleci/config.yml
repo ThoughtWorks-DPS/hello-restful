@@ -155,8 +155,8 @@ workflows:
           shell: *shell
           package-manager: *package-manager
           install-dev: true
-          lint-path: none
-          report-coverage: codeclimate
+          lint-path: api
+          #report-coverage: codeclimate
           cis-docker-image-scan: true
           after-checkout:
             - run:
@@ -164,14 +164,7 @@ workflows:
                 command: |
                   echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
                   source $BASH_ENV
-          after-analysis:
-            - run: echo 1
-          executor-image: twdps/circleci-python-builder:2.3.1
-          executor-resource-class: medium+
-          hadolint-dockerfile: false
-          unit-test: false
           coverage: false
-          #report-coverage: asdf
           filters: *on-push-main
 
 
