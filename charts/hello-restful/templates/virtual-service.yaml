@@ -15,7 +15,7 @@ spec:
     - name: {{ include "hello-restful.fullname" . }}-route
       match:
         - uri:
-            prefix: {{ .Values.virtualService.match }}
+            prefix: {{ .Values.virtualService.matchUrl }}
       route:
       - destination:
           host: {{ include "hello-restful.fullname" . }}

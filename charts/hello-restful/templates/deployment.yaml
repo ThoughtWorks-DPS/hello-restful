@@ -21,7 +21,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: {{ .Values.service.name | default "http" }}
@@ -32,6 +32,14 @@ spec:
               value: {{ .Values.image.tag }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /v1/hello/healthz
+              port: {{ .Values.service.name | default "http" }}
+          readinessProbe:
+            httpGet:
+              path: /v1/hello/healthz
+              port: {{ .Values.service.name | default "http" }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -44,7 +52,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.imagePullSecrets }}
+      {{- if ne .Release.Namespace "demo-local" }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+        - name: regcreds
       {{- end }}

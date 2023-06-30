@@ -8,11 +8,9 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port | default 80 }}
-      targetPort: {{ .Values.service.targetPort | default "http" }}
+    - name: {{ .Values.service.name }}
       protocol: {{ .Values.service.protocol | default "TCP" }}
-      {{- if .Values.service.name }}
-      name: {{ .Values.service.name }}
-      {{- end }}
+      port: {{ .Values.service.port | default 80 }}
+      targetPort: {{ .Values.service.targetPort | default "http" }}
   selector:
     {{- include "hello-restful.selectorLabels" . | nindent 4 }}

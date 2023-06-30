@@ -1,21 +1,16 @@
-# Default values are based on local-platform-environment deployment.
-# See environment values files for remote deployed confniguration.
-
 nameOverride: ""
 fullnameOverride: ""
 
 serviceAccount:
   create: true
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
   name: ""
-
+  annotations: {}
 
 service:
   type: ClusterIP
-  name: http
+  portname: http
   port: 80
+  protocol: TCP
   targetPort: 8000
 
 virtualService:
@@ -24,60 +19,39 @@ virtualService:
     - dev.twdps.io
   gateways:
     - istio-system/dev-twdps-io-gateway
-  match: /v1/hello
-
-
-replicaCount: 1
+  matchUrl: /v1/hello
 
 image:
-  repository: ghcr.io/thoughtworks-dps/hello-restful
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersionOverride.
+  repository: ghcr.io/thoughtworks-dps
+  name: hello-restful
   tag: ""
-
-imagePullSecrets:
-  - name: regcred
-
-
+  pullPolicy: IfNotPresent
 
 podSecurityContext: {}
-  # fsGroup: 2000
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 1000
 
-resources: {}
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources:
+  limits:
+    cpu: 100m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 
 autoscaling:
   enabled: false
-  minReplicas: 3
-  maxReplicas: 5
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  minReplicas: 1
+  maxReplicas: 3
+  utilizationMethod: memory
+  targetUtilizationPercentage: 80
 
 nodeSelector: {}
 
 tolerations: []
 
 affinity: {}
-
-
-          # livenessProbe:
-          #   httpGet:
-          #     path: /v1/hello/healthz
-          #     port: {{ .Values.service.name | default "http" }}
-          # readinessProbe:
-          #   httpGet:
-          #     path: /v1/hello/healthz
-          #     port: {{ .Values.service.name | default "http" }}
