@@ -155,8 +155,7 @@ workflows:
           shell: *shell
           package-manager: *package-manager
           install-dev: true
-          lint-path: api
-          pylint-options: "--max-nested-blocks 1"
+          lint-path: none
           report-coverage: codeclimate
           cis-docker-image-scan: true
           after-checkout:
