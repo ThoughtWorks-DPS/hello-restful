@@ -87,6 +87,7 @@ jobs:
 #             docker tag $IMAGE_REPOSITORY/$IMAGE_NAME:dev.${CIRCLE_SHA1:0:7} $IMAGE_REPOSITORY/$IMAGE_NAME:$CIRCLE_TAG
 #             docker push $IMAGE_REPOSITORY/$IMAGE_NAME:$CIRCLE_TAG
 
+
 workflows:
   version: 2
 
