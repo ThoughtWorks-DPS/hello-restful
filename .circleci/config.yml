@@ -51,6 +51,8 @@ jobs:
       - run:
           name: run test coverage analysis
           command: |
+            echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
+            source $BASH_ENV
             coverage run -m pytest -vv -l
             coverage xml --omit='test/*'
 
