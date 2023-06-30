@@ -157,14 +157,12 @@ workflows:
           install-dev: true
           lint-path: api
           #report-coverage: codeclimate
-          cis-docker-image-scan: true
           after-checkout:
             - run:
                 name: set API_VERSION
                 command: |
                   echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
                   source $BASH_ENV
-          coverage: false
           filters: *on-push-main
 
 
