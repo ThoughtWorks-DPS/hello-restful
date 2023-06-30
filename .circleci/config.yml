@@ -148,7 +148,6 @@ workflows:
             - test-builder
           filters: *on-push-main
 
-
       # - python/static-analysis:
       #     name: static-code-analysis
       #     context: *context
