@@ -118,6 +118,37 @@ workflows:
     jobs:
       - test-builder
 
+      - python/build-image:
+          name: secure-build
+          context: *context
+          shell: /bin/bash
+          before-build:
+            - run:
+                name: inject environment variables
+                command: |
+                  op inject -i op.env -o $BASH_ENV
+                  echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
+                  source $BASH_ENV
+                  op inject -i cosign.key.env -o cosign.key
+                  op inject -i cosign.pub.env -o cosign.pub
+          registry: *registry
+          image: hello-restful
+          # image-cve-scan: false
+          # severity-threshold: medium
+          # snyk-organization: twdps
+          # health-url: "http://0.0.0.0:8000/v1/hello/healthz"
+          # port-definition: "8000:8000"
+          # docker-run-arguments: "-e API_VERSION=dev.${CIRCLE_SHA1:0:7}"
+          after-push:
+            - cosign/install
+            - cosign/sign:
+                registry: << pipeline.parameters.registry >>
+                image: hello-restful
+                tag: dev.${CIRCLE_SHA1:0:7}
+          requires:
+            - test-builder
+          filters: *on-push-main
+
       # - python/static-analysis:
       #     name: static-code-analysis
       #     context: *context
