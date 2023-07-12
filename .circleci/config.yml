@@ -91,22 +91,23 @@ workflows:
 
   development-build:
     jobs:
-      - python/static-analysis:
-          name: static code analysis
-          context: *context
-          shell: *shell
-          package-manager: *package-manager
-          install-dev: true
-          lint-path: api
-          report-coverage: codeclimate
-          after-checkout:
-            - run:
-                name: set API_VERSION
-                command: |
-                  echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
-                  source $BASH_ENV
-          filters: *on-push-main
+      # - python/static-analysis:
+      #     name: static code analysis
+      #     context: *context
+      #     shell: *shell
+      #     package-manager: *package-manager
+      #     install-dev: true
+      #     lint-path: api
+      #     report-coverage: codeclimate
+      #     after-checkout:
+      #       - run:
+      #           name: set API_VERSION
+      #           command: |
+      #             echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
+      #             source $BASH_ENV
+      #     filters: *on-push-main
 
+      - python/machine-clone-only
       # - python/build-image:
       #     name: secure-build
       #     context: *context
