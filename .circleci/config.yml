@@ -114,6 +114,8 @@ workflows:
           image: *image
           registry: *registry
           before-build:
+            - python/configure-machine:
+                op-version: 2.18.0-beta.01
             - run:
                 name: inject environment variables
                 command: |
@@ -122,8 +124,6 @@ workflows:
                   source $BASH_ENV
                   # op inject -i cosign.key.env -o cosign.key
                   # op inject -i cosign.pub.env -o cosign.pub
-            - python/configure-machine:
-                op-version: 2.18.0-beta.01
           # requires:
           #   - static code analysis
           filters: *on-push-main
