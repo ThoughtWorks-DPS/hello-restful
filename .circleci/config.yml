@@ -114,6 +114,14 @@ workflows:
           image: *image
           registry: *registry
           before-build:
+            - run:
+                name: inject environment variables
+                command: |
+                  op inject -i op.env -o $BASH_ENV
+                  echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
+                  source $BASH_ENV
+                  # op inject -i cosign.key.env -o cosign.key
+                  # op inject -i cosign.pub.env -o cosign.pub
             - python/configure-machine:
                 op-version: 2.18.0-beta.01
           # requires:
@@ -126,14 +134,14 @@ workflows:
       #     shell: *shell
           # op-version: 2.18.0-beta.01
           # before-build:
-          #   - run:
-          #       name: inject environment variables
-          #       command: |
-          #         op inject -i op.env -o $BASH_ENV
-          #         echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
-          #         source $BASH_ENV
-          #         op inject -i cosign.key.env -o cosign.key
-          #         op inject -i cosign.pub.env -o cosign.pub
+            # - run:
+            #     name: inject environment variables
+            #     command: |
+            #       op inject -i op.env -o $BASH_ENV
+            #       echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
+            #       source $BASH_ENV
+            #       op inject -i cosign.key.env -o cosign.key
+            #       op inject -i cosign.pub.env -o cosign.pub
           # registry: *registry
           # image: hello-restful
           # image-cve-scan: false
