@@ -11,6 +11,7 @@ globals:
   - &context twdps-core-labs-team
   - &shell op run --env-file op.env -- /bin/bash -eo pipefail
   - &package-manager pip
+  - &image hello-restful
   - &registry ghcr.io/thoughtworks-dps
 
 parameters:
@@ -107,7 +108,18 @@ workflows:
       #             source $BASH_ENV
       #     filters: *on-push-main
 
-      - python/machine-clone-only
+      - python/oci-image-build:
+          name: build multi-arch image
+          context: *context
+          shell: *shell
+          image: *image
+          registry: *registry
+          before-build:
+            - python/configure-machine:
+                op-version: 2.18.0-beta.01
+          # requires:
+          #   - static code analysis
+          filters: *on-push-main
       
       # - python/build-image:
       #     name: secure-build
