@@ -111,7 +111,6 @@ workflows:
       - python/oci-image-build:
           name: build multi-arch image
           context: *context
-          shell: *shell
           image: *image
           registry: *registry
           before-build:
