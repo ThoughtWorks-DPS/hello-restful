@@ -31,9 +31,7 @@ on-tag-main: &on-tag-main
   tags:
     only: /.*/
 
-jobs:
-
-
+# jobs:
 
   # deploy-hello-restful:
   #   parameters:
@@ -113,7 +111,7 @@ workflows:
           name: secure-build
           context: *context
           shell: *shell
-          op-version: 2.18.0-beta.01
+          #op-version: 2.18.0-beta.01
           before-build:
             - run:
                 name: inject environment variables
