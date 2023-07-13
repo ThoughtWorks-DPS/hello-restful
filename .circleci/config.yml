@@ -14,12 +14,6 @@ globals:
   - &image hello-restful
   - &registry ghcr.io/thoughtworks-dps
 
-parameters:
-  registry:
-    description: publish to this registry
-    type: string
-    default: ghcr.io/thoughtworks-dps
-
 on-push-main: &on-push-main
   branches:
     only: /main/
@@ -93,27 +87,6 @@ jobs:
                  --values charts/hello-restful/values-<< parameters.namespace >>.yaml \
                  --set image.tag=<< parameters.tag >>
 
-#   tag-and-publish:
-#     docker:
-#       - image: twdps/circleci-python-builder:stable
-#     environment:
-#       - IMAGE_REPOSITORY: ghcr.io/thoughtworks-dps
-#       - IMAGE_NAME: hello-restful
-#     steps:
-#       - setup_remote_docker
-#       - checkout
-#       - run:
-#           name: publish tagged docker image to Github Packages
-#           command: |
-#             source op.env
-#             export DOCKER_PASSWORD=$(op read $DOCKER_PASSWORD)
-#             export DOCKER_LOGIN=$(op read $DOCKER_LOGIN)
-#             echo $DOCKER_PASSWORD | docker login ghcr.io -u $DOCKER_LOGIN --password-stdin
-#             docker pull $IMAGE_REPOSITORY/$IMAGE_NAME:dev.${CIRCLE_SHA1:0:7}
-#             docker tag $IMAGE_REPOSITORY/$IMAGE_NAME:dev.${CIRCLE_SHA1:0:7} $IMAGE_REPOSITORY/$IMAGE_NAME:$CIRCLE_TAG
-#             docker push $IMAGE_REPOSITORY/$IMAGE_NAME:$CIRCLE_TAG
-
-
 workflows:
   version: 2
 
@@ -150,14 +123,6 @@ workflows:
                 op-version: 2.18.0-beta.01
                 snyk-version: '1.1184.0'
             - set-environment
-            # - run:
-            #     name: inject environment variables
-            #     command: |
-            #       op inject -i op.env -o $BASH_ENV
-            #       echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
-            #       source $BASH_ENV
-            #       # op inject -i cosign.key.env -o cosign.key
-            #       # op inject -i cosign.pub.env -o cosign.pub
           # requires:
           #   - static code analysis
           filters: *on-push-main
@@ -172,8 +137,12 @@ workflows:
             - build multi-arch image
           filters: *on-push-main
 
-  # publish-to-registry:
-  #   jobs:
-  #     - tag-and-publish:
-  #         context: << pipeline.parameters.context >>
-  #         filters: *on-tag-main
+  release:
+    jobs:
+      - python/publish-image:
+          name: publish release candidate
+          context: *context
+          image: *image
+          registry: *registry
+          publish-tag: $CIRCLE_TAG
+          filters: *on-tag-main
