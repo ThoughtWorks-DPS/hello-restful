@@ -33,9 +33,6 @@ OAS documentation on http://localhost:8000/v1/hello/apidocs
   {{- end }}
 
 
-
-
-
 helm upgrade hello-restful charts/hello-restful \
      --install \
      --namespace demo-dev \
