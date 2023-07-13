@@ -145,4 +145,6 @@ workflows:
           image: *image
           registry: *registry
           publish-tag: $CIRCLE_TAG
+          before-push:
+            - set-environment
           filters: *on-tag-main
