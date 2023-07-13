@@ -113,6 +113,8 @@ workflows:
           context: *context
           image: *image
           registry: *registry
+          image-cve-scan: true
+          snyk-organization: twdps
           before-build:
             - python/configure-machine:
                 op-version: 2.18.0-beta.01
@@ -129,7 +131,13 @@ workflows:
           filters: *on-push-main
       
 
-      
+
+            # severity-threshold: << parameters.severity-threshold >>
+            # snyk-organization: << parameters.snyk-organization >>
+            # snyk-token: << parameters.snyk-token >>
+            # skip-base-image: << parameters.skip-base-image >>
+
+
       # - python/build-image:
       #     name: secure-build
       #     context: *context
