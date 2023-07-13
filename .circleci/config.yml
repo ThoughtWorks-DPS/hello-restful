@@ -76,7 +76,7 @@ jobs:
         description: image to deploy
         type: string
     docker:
-      - image: twdps/circleci-kube-ops:stable
+      - image: twdps/circleci-kube-ops:alpine-stable
     steps:
       - checkout
       - setup_remote_docker
