@@ -9,4 +9,4 @@ spec:
   maxUnavailable: {{ .Values.podDisruptionBudget.maxUnavailable }}
   selector:
     matchLabels:
-      {{- include "hello-restful.labels" . | nindent 4 }}
+      {{- include "hello-restful.labels" . | nindent 6 }}
