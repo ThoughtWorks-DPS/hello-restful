@@ -10,3 +10,4 @@ dockerconfig.json
 .venv
 source.env
 kubeconfig
+test.sh
