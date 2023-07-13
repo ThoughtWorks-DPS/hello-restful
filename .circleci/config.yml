@@ -130,7 +130,6 @@ workflows:
           # requires:
           #   - static code analysis
           filters: *on-push-main
-      
 
             # severity-threshold: << parameters.severity-threshold >>
             # snyk-organization: << parameters.snyk-organization >>
