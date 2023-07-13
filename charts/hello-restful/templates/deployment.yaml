@@ -62,19 +62,19 @@ spec:
                 labelSelector:
                   matchLabels:
                     app.kubernetes.io/name: {{ include "hello-restful.name" . }}
-        topologySpreadConstraints:
-          - maxSkew: {{ .Values.topologySpreadConstraints.maxZoneSkew }}
-            topologyKey: "topology.kubernetes.io/zone"
-            whenUnsatisfiable: ScheduleAnyway
-            labelSelector:
-              matchLabels:
-                app.kubernetes.io/name: {{ include "hello-restful.name" . }}
-          - maxSkew: {{ .Values.topologySpreadConstraints.maxNodeSkew }}
-            topologyKey: "kubernetes.io/hostname"
-            whenUnsatisfiable: ScheduleAnyway
-            labelSelector:
-              matchLabels:
-                app.kubernetes.io/name: {{ include "hello-restful.name" . }}
+      topologySpreadConstraints:
+        - maxSkew: {{ .Values.topologySpreadConstraints.maxZoneSkew }}
+          topologyKey: "topology.kubernetes.io/zone"
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: {{ include "hello-restful.name" . }}
+        - maxSkew: {{ .Values.topologySpreadConstraints.maxNodeSkew }}
+          topologyKey: "kubernetes.io/hostname"
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: {{ include "hello-restful.name" . }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
