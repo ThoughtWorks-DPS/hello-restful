@@ -48,7 +48,6 @@ Selector labels
 app.kubernetes.io/name: {{ include "hello-restful.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Values.image.tag }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
