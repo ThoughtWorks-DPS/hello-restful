@@ -86,27 +86,30 @@ jobs:
                  --values charts/hello-restful/values.yaml \
                  --values charts/hello-restful/values-<< parameters.namespace >>.yaml \
                  --set image.tag=<< parameters.tag >>
+      # - poll helm for statis
+      # - run tests when its up
+      # - deploy observability
 
 workflows:
   version: 2
 
   development-build:
     jobs:
-      # - python/static-analysis:
-      #     name: static code analysis
-      #     context: *context
-      #     shell: *shell
-      #     package-manager: *package-manager
-      #     install-dev: true
-      #     lint-path: api
-      #     report-coverage: codeclimate
-      #     after-checkout:
-      #       - run:
-      #           name: set API_VERSION
-      #           command: |
-      #             echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
-      #             source $BASH_ENV
-      #     filters: *on-push-main
+      - python/static-analysis:
+          name: static code analysis
+          context: *context
+          shell: *shell
+          package-manager: *package-manager
+          install-dev: true
+          lint-path: api
+          report-coverage: codeclimate
+          after-checkout:
+            - run:
+                name: set API_VERSION
+                command: |
+                  echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
+                  source $BASH_ENV
+          filters: *on-push-main
 
       - python/oci-image-build:
           name: build multi-arch image
@@ -123,8 +126,8 @@ workflows:
                 op-version: 2.18.0-beta.01
                 snyk-version: '1.1184.0'
             - set-environment
-          # requires:
-          #   - static code analysis
+          requires:
+            - static code analysis
           filters: *on-push-main
 
       - deploy-hello-restful:
@@ -147,4 +150,30 @@ workflows:
           publish-tag: $CIRCLE_TAG
           before-push:
             - set-environment
+          filters: *on-tag-main
+
+      - deploy-hello-restful:
+          name: qa deployment
+          context: *context
+          cluster: prod-us-east-1
+          namespace: qa
+          tag: $CIRCLE_TAG
+          requires:
+            - publish release candidate
+          filters: *on-tag-main
+
+      - approve-prod:
+          type: approval
+          requires:
+            - qa deployment
+          filters: *on-tag-main
+
+      - deploy-hello-restful:
+          name: prod deployment
+          context: *context
+          cluster: prod-us-east-1
+          namespace: prod
+          tag: $CIRCLE_TAG
+          requires:
+            - approve-prod
           filters: *on-tag-main
