@@ -10,7 +10,7 @@
 </div>
 <br />
 
-hello-restful is a lightweight api designed to be deployed on a kubernetes-based delivey infrastructure and provide common http testing endpoints and demonstrate one ethod of using an openapi framework for automated api documentation.  
+hello-restful is a lightweight api designed to be deployed on a kubernetes-based delivey infrastructure and provide common http testing endpoints and demonstrate one method of using an openapi framework for automated api documentation.  
 
 To deploy in local cluster:  
 

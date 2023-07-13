@@ -1,5 +1,13 @@
 FROM python:3.11-alpine
 
+LABEL org.opencontainers.image.title="hello-restful" \
+      org.opencontainers.image.description="Lightweight API providing request and response endpoints" \
+      org.opencontainers.image.documentation="https://github.com/ThoughtWorks-DPS/hello-restful" \
+      org.opencontainers.image.source="https://github.com/ThoughtWorks-DPS/hello-restful" \
+      org.opencontainers.image.url="https://github.com/ThoughtWorks-DPS/hello-restful" \
+      org.opencontainers.image.vendor="ThoughtWorks, Inc." \
+      org.opencontainers.image.licenses="MIT"
+
 ENV MUSL_LOCPATH=/usr/share/i18n/locales/musl \
     LANG="C.UTF-8" \
     LANGUAGE="en_US.UTF-8" \
