@@ -143,7 +143,7 @@ workflows:
           name: publish release candidate
           context: *context
           image: *image
-          registry: *registry
+          registry: ghcr.io\/thoughtworks-dps
           publish-tag: $CIRCLE_TAG
           before-push:
             - set-environment
