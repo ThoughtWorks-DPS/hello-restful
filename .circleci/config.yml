@@ -32,39 +32,66 @@ on-tag-main: &on-tag-main
   tags:
     only: /.*/
 
-# jobs:
+commands:
 
-  # deploy-hello-restful:
-  #   parameters:
-  #     cluster:
-  #       description: target cluster
-  #       type: string
-  #     namespace:
-  #       description: deploy to this namespace
-  #       type: string
-  #     tag:
-  #       description: image to deploy
-  #       type: string
-  #   docker:
-  #     - image: twdps/circleci-kube-ops:stable
-  #   steps:
-  #     - checkout
-  #     - setup_remote_docker
-  #     - run:
-  #         name: set environment
-  #         command: |
-  #           op inject -i op.env -o $BASH_ENV
-  #           source $BASH_ENV
-  #           mkdir -p ~/.kube
-  #           ENV=<< parameters.cluster >> op inject -i tpl/kubeconfig.tpl -o ~/.kube/config
-  #     - run:
-  #         name: deploy hello-restful
-  #         command: |
-  #           helm upgrade hello-restful charts/hello-restful \
-  #                --install \
-  #                -n << parameters.namespace>> \
-  #                --values charts/hello-restful/values.yaml
-  #                --set image.tag=dev.${CIRCLE_SHA1:0:7}
+  set-environment:
+    parameters:
+      cluster:
+        description: target cluster
+        type: string
+        default: ""
+      tag:
+        description: image to deploy
+        type: string
+        default: dev.${CIRCLE_SHA1:0:7}
+    steps:
+      - run:
+          name: set environment
+          command: |
+            op inject -i op.env -o $BASH_ENV
+            echo "export API_VERSION=<< parameters.tag >>" >> $BASH_ENV
+            source $BASH_ENV
+            op inject -i tpl/cosign.key.tpl -o cosign.key
+            op inject -i tpl/cosign.pub.tpl -o cosign.pub
+      - when:
+          condition: << parameters.cluster >>
+          steps:
+            - run:
+                name: set ~/.kube/config
+                command: |
+                  mkdir -p ~/.kube
+                  ENV=<< parameters.cluster >> op inject -i tpl/kubeconfig.tpl -o ~/.kube/config
+
+jobs:
+
+  deploy-hello-restful:
+    parameters:
+      cluster:
+        description: target cluster
+        type: string
+      namespace:
+        description: deploy to this env namespace
+        type: string
+      tag:
+        description: image to deploy
+        type: string
+    docker:
+      - image: twdps/circleci-kube-ops:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - set-environment:
+          cluster: << parameters.cluster >>
+          tag: << parameters.tag >>
+      - run:
+          name: deploy hello-restful
+          command: |
+            helm upgrade hello-restful charts/hello-restful \
+                 --install \
+                 --namespace demo-<< parameters.namespace>> \
+                 --values charts/hello-restful/values.yaml \
+                 --values charts/hello-restful/values-<< parameters.namespace >>.yaml \
+                 --set image.tag=<< parameters.tag >>
 
 #   tag-and-publish:
 #     docker:
@@ -122,94 +149,28 @@ workflows:
             - python/configure-machine:
                 op-version: 2.18.0-beta.01
                 snyk-version: '1.1184.0'
-            - run:
-                name: inject environment variables
-                command: |
-                  op inject -i op.env -o $BASH_ENV
-                  echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
-                  source $BASH_ENV
-                  # op inject -i cosign.key.env -o cosign.key
-                  # op inject -i cosign.pub.env -o cosign.pub
-          # requires:
-          #   - static code analysis
-          filters: *on-push-main
-
-      # - python/build-image:
-      #     name: secure-build
-      #     context: *context
-      #     shell: *shell
-          # op-version: 2.18.0-beta.01
-          # before-build:
+            - set-environment
             # - run:
             #     name: inject environment variables
             #     command: |
             #       op inject -i op.env -o $BASH_ENV
             #       echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
             #       source $BASH_ENV
-            #       op inject -i cosign.key.env -o cosign.key
-            #       op inject -i cosign.pub.env -o cosign.pub
-          # registry: *registry
-          # image: hello-restful
-          # image-cve-scan: false
-          # severity-threshold: medium
-          # snyk-organization: twdps
-          # health-url: "http://0.0.0.0:8000/v1/hello/healthz"
-          # port-definition: "8000:8000"
-          # docker-run-arguments: "-e API_VERSION=dev.${CIRCLE_SHA1:0:7}"
-          # after-push:
-          #   - cosign/install
-          #   - cosign/sign:
-          #       registry: << pipeline.parameters.registry >>
-          #       image: hello-restful
-          #       tag: dev.${CIRCLE_SHA1:0:7}
+            #       # op inject -i cosign.key.env -o cosign.key
+            #       # op inject -i cosign.pub.env -o cosign.pub
           # requires:
-          #   - test-builder
-          # filters: *on-push-main
+          #   - static code analysis
+          filters: *on-push-main
 
-
-
-
-
-      # - python/secure-image-build:
-      #     name: secure-build
-      #     context: *context
-      #     shell: /bin/bash
-      #     before-build:
-      #       - run:
-      #           name: inject environment variables
-      #           command: |
-      #             op inject -i op.env -o $BASH_ENV
-      #             echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
-      #             source $BASH_ENV
-      #             op inject -i cosign.key.env -o cosign.key
-      #             op inject -i cosign.pub.env -o cosign.pub
-      #     registry: *registry
-      #     image: hello-restful
-      #     image-cve-scan: true
-      #     severity-threshold: medium
-      #     snyk-organization: twdps
-      #     health-url: "http://0.0.0.0:8000/v1/hello/healthz"
-      #     port-definition: "8000:8000"
-      #     docker-run-arguments: "-e API_VERSION=dev.${CIRCLE_SHA1:0:7}"
-      #     after-push:
-      #       - cosign/install
-      #       - cosign/sign:
-      #           registry: << pipeline.parameters.registry >>
-      #           image: hello-restful
-      #           tag: dev.${CIRCLE_SHA1:0:7}
-      #     requires:
-      #       - static-code-analysis
-      #     filters: *on-push-main
-
-      # - deploy-hello-restful:
-      #     name: dev deployment
-      #     cluster: prod-us-east-1
-      #     namespace: demo-dev
-      #     tag: dev.${CIRCLE_SHA1:0:7}
-      #     context: *context
-      #     requires:
-      #       - secure-build
-      #     filters: *on-push-main
+      - deploy-hello-restful:
+          name: dev deployment
+          context: *context
+          cluster: prod-us-east-1
+          namespace: dev
+          tag: dev.${CIRCLE_SHA1:0:7}
+          requires:
+            - build multi-arch image
+          filters: *on-push-main
 
   # publish-to-registry:
   #   jobs:

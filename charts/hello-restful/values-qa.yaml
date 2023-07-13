@@ -1,3 +1,5 @@
+# values.yaml includes qa settings
+
 virtualService:
   hosts:
     - qa.twdps.io

@@ -45,7 +45,7 @@ resources:
 
 autoscaling:
   enabled: false
-  minReplicas: 1
+  minReplicas: 2
   maxReplicas: 3
   utilizationMethod: memory
   targetUtilizationPercentage: 80
@@ -54,4 +54,9 @@ nodeSelector: {}
 
 tolerations: []
 
-affinity: {}
+topologySpreadConstraints:
+  maxNodeSkew: 1
+  maxZoneSkew: 1
+
+podDisruptionBudget:
+  maxUnavailable: 1

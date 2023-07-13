@@ -1,1 +1,9 @@
 # values.yaml includes dev settings
+
+virtualService:
+  create: true
+  hosts:
+    - dev.twdps.io
+  gateways:
+    - istio-system/dev-twdps-io-gateway
+  matchUrl: /v1/hello
