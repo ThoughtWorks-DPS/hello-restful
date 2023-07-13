@@ -131,13 +131,6 @@ workflows:
           #   - static code analysis
           filters: *on-push-main
 
-
-            # severity-threshold: << parameters.severity-threshold >>
-            # snyk-organization: << parameters.snyk-organization >>
-            # snyk-token: << parameters.snyk-token >>
-            # skip-base-image: << parameters.skip-base-image >>
-
-
       # - python/build-image:
       #     name: secure-build
       #     context: *context
