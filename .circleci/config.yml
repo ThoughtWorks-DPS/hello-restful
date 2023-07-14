@@ -81,7 +81,7 @@ jobs:
           name: deploy hello-restful
           command: |
             helm upgrade hello-restful charts/hello-restful \
-                 --install --atomic --timeout 20s \
+                 --install --atomic --timeout 30s \
                  --namespace demo-<< parameters.namespace>> \
                  --values charts/hello-restful/values.yaml \
                  --values charts/hello-restful/values-<< parameters.namespace >>.yaml \
