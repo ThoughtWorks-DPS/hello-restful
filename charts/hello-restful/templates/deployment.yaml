@@ -19,8 +19,10 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           image: "{{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -44,37 +46,14 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.affinity }}
       affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: app.kubernetes.io/name
-                    operator: In
-                    values:
-                      - {{ include "hello-restful.name" . }}
-              topologyKey: kubernetes.io/hostname
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              podAffinityTerm:
-                topologyKey: failure-domain.beta.kubernetes.io/zone
-                labelSelector:
-                  matchLabels:
-                    app.kubernetes.io/name: {{ include "hello-restful.name" . }}
+        {{- toYaml . | nindent 8 }}  
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
       topologySpreadConstraints:
-        - maxSkew: {{ .Values.topologySpreadConstraints.maxZoneSkew }}
-          topologyKey: "topology.kubernetes.io/zone"
-          whenUnsatisfiable: ScheduleAnyway
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: {{ include "hello-restful.name" . }}
-        - maxSkew: {{ .Values.topologySpreadConstraints.maxNodeSkew }}
-          topologyKey: "kubernetes.io/hostname"
-          whenUnsatisfiable: ScheduleAnyway
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: {{ include "hello-restful.name" . }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}

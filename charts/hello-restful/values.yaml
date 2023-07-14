@@ -14,12 +14,12 @@ service:
   targetPort: 8000
 
 virtualService:
-  create: true
-  hosts:
-    - dev.twdps.io
-  gateways:
-    - istio-system/dev-twdps-io-gateway
-  matchUrl: /v1/hello
+  create: false
+  # hosts:
+  #   - "example.com"
+  # gateways:
+  #   - istio-system/example-com-gateway
+  # matchUrl: /v1/hello
 
 image:
   repository: ghcr.io/thoughtworks-dps
@@ -29,11 +29,7 @@ image:
 
 podSecurityContext: {}
 
-securityContext:
-  allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 1000
+securityContext: {}
 
 resources:
   limits:
@@ -43,20 +39,23 @@ resources:
     cpu: 100m
     memory: 128Mi
 
+# required for podDisruptionBudget
 autoscaling:
   enabled: false
-  minReplicas: 2
-  maxReplicas: 3
-  utilizationMethod: memory
-  targetUtilizationPercentage: 80
+  # minReplicas: 2
+  # maxReplicas: 3
+  # utilizationMethod: memory
+  # targetUtilizationPercentage: 80
+
+affinity: {}
 
 nodeSelector: {}
 
 tolerations: []
 
-topologySpreadConstraints:
-  maxNodeSkew: 1
-  maxZoneSkew: 1
+topologySpreadConstraints: {}
 
-podDisruptionBudget:
-  maxUnavailable: 1
+podDisruptionBudget: 
+  create: false
+  # only supported
+  # maxUnavailable:
