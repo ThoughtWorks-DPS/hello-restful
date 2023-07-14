@@ -26,16 +26,3 @@ $ uvicorn api.main:api --reload
 
 Access on http://localhost:8000/v1/hello  
 OAS documentation on http://localhost:8000/v1/hello/apidocs  
-
-
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
-
-
-helm upgrade hello-restful charts/hello-restful \
-     --install \
-     --namespace demo-dev \
-     --values charts/hello-restful/values.yaml \
-     --values charts/hello-restful/values-dev.yaml \
-     --set image.tag=dev.c28f8dd

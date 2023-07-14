@@ -91,7 +91,7 @@ jobs:
           command: |
             reponse=$(curl https://twdps.io/v1/hello/healthz)
             if [[ $(echo $reponse | jq -r .status) != "ok" ]]; then
-                echo "error: healthz not "ok"
+                echo "error: healthz not ok"
                 exit 1
             fi
       # deploy observability
