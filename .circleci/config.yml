@@ -81,14 +81,20 @@ jobs:
           name: deploy hello-restful
           command: |
             helm upgrade hello-restful charts/hello-restful \
-                 --install \
+                 --install --atomic --timeout 20s \
                  --namespace demo-<< parameters.namespace>> \
                  --values charts/hello-restful/values.yaml \
                  --values charts/hello-restful/values-<< parameters.namespace >>.yaml \
                  --set image.tag=<< parameters.tag >>
-      # - poll helm for statis
-      # - run tests when its up
-      # - deploy observability
+      - run:
+          name: test healthz endpoint
+          command: |
+            reponse=$(curl https://twdps.io/v1/hello/healthz)
+            if [[ $(echo $reponse | jq -r .status) != "ok" ]]; then
+                echo "error: healthz not "ok"
+                exit 1
+            fi
+      # deploy observability
 
 workflows:
   version: 2

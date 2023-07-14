@@ -5,7 +5,7 @@ virtualService:
   hosts:
     - twdps.io
   gateways:
-    - istio-system/prod-twdps-io-gateway
+    - istio-system/twdps-io-gateway
   matchUrl: /v1/hello
 
 image:

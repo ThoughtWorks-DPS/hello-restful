@@ -18,7 +18,7 @@ spec:
             prefix: {{ .Values.virtualService.matchUrl }}
       route:
       - destination:
-          host: {{ include "hello-restful.fullname" . }}
+          host: {{ include "hello-restful.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
           port:
             number: {{ .Values.service.port | default 80 }}
 {{- end }}
