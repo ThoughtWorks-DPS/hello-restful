@@ -27,6 +27,13 @@ image:
   tag: ""
   pullPolicy: IfNotPresent
 
+strategy: {}
+  # type: RollingUpdate
+  # rollingUpdate:
+  #   maxSurge: 25%
+  #   maxUnavailable: 25%
+
+
 podSecurityContext: {}
 
 securityContext: {}

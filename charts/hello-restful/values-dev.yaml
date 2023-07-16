@@ -8,6 +8,12 @@ virtualService:
     - istio-system/dev-twdps-io-gateway
   matchUrl: /v1/hello
 
+strategy: 
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 100%
+    maxUnavailable: 50%
+
 securityContext:
   allowPrivilegeEscalation: false
   readOnlyRootFilesystem: true

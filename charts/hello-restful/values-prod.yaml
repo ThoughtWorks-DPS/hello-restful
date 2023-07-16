@@ -11,6 +11,12 @@ virtualService:
 image:
   pullPolicy: Always
 
+strategy: 
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 100%
+    maxUnavailable: 50%
+
 resources:
   limits:
     cpu: 200m
@@ -21,7 +27,7 @@ securityContext:
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 1000
-  
+
 autoscaling:
   enabled: true
   minReplicas: 3
