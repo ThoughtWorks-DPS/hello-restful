@@ -1,5 +1,5 @@
 {{- if .Values.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "hello-restful.fullname" . }}
@@ -17,5 +17,5 @@ spec:
     - type: Resource
       resource:
         name: {{ .Values.autoscaling.utilizationMethod }}
-        targetAverageUtilization: {{ .Values.autoscaling.targetUtilizationPercentage }}
+        averageUtilization: {{ .Values.autoscaling.targetUtilizationPercentage }}
 {{- end }}
