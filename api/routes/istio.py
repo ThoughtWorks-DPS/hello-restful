@@ -20,14 +20,15 @@ route = APIRouter()
            )
 async def get_envoy_metadata(response: Response):
     """
-    Returns metadata queried from istio envoy sidecar
+    Returns locality metadata queried from istio envoy sidecar
     """
     try:
         response.status_code = status.HTTP_200_OK
         server_response = requests.get(settings.server_info_url, timeout=10)
         json_response = json.loads(server_response.content)
         locality = json_response['node']['locality']
-        return {"locality": locality}
+        #return {"locality": locality}
+        return json_response
     except requests.exceptions.ConnectionError:
         response.status_code = status.HTTP_502_BAD_GATEWAY
         return {

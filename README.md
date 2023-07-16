@@ -10,11 +10,15 @@
 </div>
 <br />
 
-hello-restful is a lightweight api designed to be deployed on a kubernetes-based delivey infrastructure and provide common http testing endpoints and demonstrate one method of using an openapi framework for automated api documentation.  
+hello-restful is a small, fastapi service designed to be deployed on kubernetes and provide common http request/response endpoints and demonstrate using an openapi framework for automated api documentation.  
 
-To deploy in local cluster:  
+Access at [https://twdps.io/v1/hello](https://twdps.io/v1/hello). OAS documentation [here](https://twdps.io/v1/hello).  
 
-For a simple demo of the api features and documentation: `docker run -it -d -p 8000:8000 ghcr.io/thoughtworks-dps/hello-restful`.  
+To run locally on docker:    
+```bash
+docker run -it -d -p 8000:8000 ghcr.io/thoughtworks-dps/hello-restful 
+```
+Access on http://localhost:8000/v1/hello   
 
 ## local developement  
 
@@ -23,8 +27,3 @@ For a simple demo of the api features and documentation: `docker run -it -d -p 8
 ```
 $ uvicorn api.main:api --reload
 ```
-
-Access on http://localhost:8000/v1/hello  
-OAS documentation on http://localhost:8000/v1/hello/apidocs  
-
-
