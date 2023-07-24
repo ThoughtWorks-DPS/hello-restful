@@ -18,7 +18,7 @@ ENV MUSL_LOCPATH=/usr/share/i18n/locales/musl \
 RUN apk add --no-cache \
         libintl==0.21.1-r7 && \
     apk --no-cache add --virtual build-dependencies \
-        cmake==3.26.4-r0 \
+        cmake==3.26.5-r0 \
         make==4.4.1-r1 \
         musl==1.2.4-r0 \
         musl-dev==1.2.4-r0 \
