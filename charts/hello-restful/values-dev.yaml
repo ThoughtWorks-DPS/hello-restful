@@ -31,32 +31,16 @@ podDisruptionBudget:
   create: true
   maxUnavailable: 1
 
-affinity:
-  podAntiAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchExpressions:
-            - key: app.kubernetes.io/name
-              operator: In
-              values:
-                - hello-restful
-        topologyKey: kubernetes.io/hostname
-    preferredDuringSchedulingIgnoredDuringExecution:
-      - weight: 100
-        podAffinityTerm:
-          topologyKey: failure-domain.beta.kubernetes.io/zone
-          labelSelector:
-            matchLabels:
-              app.kubernetes.io/name: hello-restful
+affinity: {}
 
 topologySpreadConstraints:
-  - maxSkew: 1
+  - maxSkew: 3
     topologyKey: "topology.kubernetes.io/zone"
     whenUnsatisfiable: ScheduleAnyway
     labelSelector:
       matchLabels:
         app.kubernetes.io/name: hello-restful
-  - maxSkew: 1
+  - maxSkew: 3
     topologyKey: "kubernetes.io/hostname"
     whenUnsatisfiable: ScheduleAnyway
     labelSelector:

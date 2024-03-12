@@ -42,10 +42,16 @@ spec:
             httpGet:
               path: /v1/hello/healthz
               port: {{ .Values.service.name | default "http" }}
+            initialDelaySeconds: 3
+            periodSeconds: 15
+            failureThreshold: 4
           readinessProbe:
             httpGet:
               path: /v1/hello/healthz
               port: {{ .Values.service.name | default "http" }}
+            initialDelaySeconds: 3
+            failureThreshold: 4
+            periodSeconds: 15
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

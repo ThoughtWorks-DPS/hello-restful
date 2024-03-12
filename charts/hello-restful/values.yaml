@@ -7,8 +7,9 @@ serviceAccount:
   annotations: {}
 
 service:
+  name: hello-restful
   type: ClusterIP
-  portname: http
+  portname: hello-restful
   port: 80
   protocol: TCP
   targetPort: 8000

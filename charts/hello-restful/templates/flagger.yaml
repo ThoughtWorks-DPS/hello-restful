@@ -1,0 +1,51 @@
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: {{ include "hello-restful.fullname" . }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "hello-restful.fullname" . }}
+  autoscalerRef:
+    apiVersion: autoscaling/v2
+    kind: HorizontalPodAutoscaler
+    name: {{ include "hello-restful.fullname" . }}
+    primaryScalerReplicas:
+      minReplicas: 2
+      maxReplicas: 5
+  service:
+    match:
+      - uri:
+          prefix: {{ .Values.virtualService.matchUrl }}
+    port: 80
+    targetPort: {{ include "hello-restful.fullname" . }}
+    portName: {{ include "hello-restful.fullname" . }}
+    gateways:
+    {{- toYaml .Values.virtualService.gateways | nindent 4 }}
+    hosts:
+    {{- toYaml .Values.virtualService.hosts | nindent 4 }}
+  analysis:
+    # schedule interval (default 60s)
+    interval: 5s
+    # max number of failed metric checks before rollback
+    threshold: 5
+    # max traffic percentage routed to canary
+    # percentage (0-100)
+    maxWeight: 50
+    # canary increment step
+    # percentage (0-100)
+    stepWeight: 10
+    metrics:
+    - name: request-success-rate
+      # minimum req success rate (non 5xx responses)
+      # percentage (0-100)
+      thresholdRange:
+        min: 99
+      interval: 1m
+    - name: request-duration
+      # maximum req duration P99
+      # milliseconds
+      thresholdRange:
+        max: 500
+      interval: 30s
