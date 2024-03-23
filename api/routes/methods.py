@@ -125,7 +125,7 @@ def post_resource(user: UserIn, response: Response):
         return { "detail": "supplied email is already in use." }
 
     # mock creating new resource
-    new_user = user.dict()
+    new_user = user.model_dump()
     new_user["userid"] = 509612
 
     return new_user
@@ -157,7 +157,7 @@ def put_resource_userid(user: UserIn, response: Response,
         return { "detail": "Resource not found" }
 
     # replace all fields in existing resource
-    result[0].update(user.dict())
+    result[0].update(user.model_dump())
     return result[0]
 
 @route.patch("/resource/{userid}",
@@ -187,7 +187,7 @@ def patch_resource_userid(user: UserUpdate, response: Response,
         return { "detail": "Resource not found" }
 
     # merge changes to existing resource
-    result[0].update(user.dict(exclude_unset=True))
+    result[0].update(user.model_dump(exclude_unset=True))
     return result[0]
 
 @route.delete("/resource/{userid}",
