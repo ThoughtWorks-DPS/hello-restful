@@ -4,7 +4,7 @@ hello-restful api
 api base configuration
 """
 import os
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 DESCRIPTION = """
 <a href="https://github.com/ThoughtWorks-DPS/hello-restful"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ThoughtWorks-DPS/hello-restful"></a> <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/ThoughtWorks-DPS/hello-restful"></a>
