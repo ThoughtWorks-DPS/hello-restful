@@ -6,25 +6,29 @@ Example /resource methods
 import copy
 from typing import Optional
 from fastapi import APIRouter, Response, status, Path
-from pydantic import BaseModel, constr, EmailStr, Field
+from pydantic import BaseModel, constr, EmailStr, Field, ConfigDict
 
 LETTERS_PLUS_DASH = r'^[a-zA-Z-]+$'
 
 # pylint: disable=too-few-public-methods
-class UserIn(BaseModel, anystr_strip_whitespace=True, extra="forbid"):
+class UserIn(BaseModel):
     """schema for create-user input body"""
     first_name: constr(min_length=2, max_length=30, pattern=LETTERS_PLUS_DASH)
     last_name: constr(min_length=2, max_length=30, pattern=LETTERS_PLUS_DASH)
     email: EmailStr
     position: constr(min_length=2, max_length=45, pattern=LETTERS_PLUS_DASH)
 
+    model_config = ConfigDict(extra='forbid', str_strip_whitespace=True)
+
 # pylint: disable=too-few-public-methods
-class UserUpdate(BaseModel, anystr_strip_whitespace=True, extra="forbid"):
+class UserUpdate(BaseModel):
     """schema for update-user input body"""
     first_name: Optional[str] = Field(None, min_length=2, max_length=30, pattern=LETTERS_PLUS_DASH)
     last_name: Optional[str] = Field(None, min_length=2, max_length=30, pattern=LETTERS_PLUS_DASH)
     email: Optional[EmailStr]
     position: Optional[str] = Field(None, min_length=3, max_length=45, pattern=LETTERS_PLUS_DASH)
+
+    model_config = ConfigDict(extra='forbid', str_strip_whitespace=True)
 
 # simulated database
 resource_data = {
