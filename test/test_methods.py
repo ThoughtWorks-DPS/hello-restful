@@ -156,19 +156,25 @@ def test_resource_post_extra_data():
                            })
     assert response.status_code == 422
     assert response.json() == {
-      "detail": [
-        {
-          "loc": [
-            "body",
-            "position"
-          ],
-          "msg": "field required",
-          "type": "value_error.missing"
-        }
-      ]
+        "detail": [
+            {
+                "input": {
+                    "email": "foo@example.com",
+                    "first_name": "foo",
+                    "last_name": "bar"
+                },
+                "loc": [
+                    "body",
+                    "position"
+                ],
+                "msg": "Field required",
+                "type": "missing",
+                "url": "https://errors.pydantic.dev/2.6/v/missing"
+            }
+        ]
     }
 
-
+test_resource_post_extra_data
 # test model validators
 def test_resource_post_model_validators():
     response = client.post("resource",
@@ -179,50 +185,63 @@ def test_resource_post_model_validators():
                             "position": "thishastoomanycharactersthishastoomanycharacters"
                           })
     assert response.status_code == 422
+    print(response.json())
     assert response.json() == {
-      "detail": [
-        {
-          "loc": [
-            "body",
-            "first_name"
-          ],
-          "msg": "ensure this value has at most 30 characters",
-          "type": "value_error.any_str.max_length",
-          "ctx": {
-            "limit_value": 30
-          }
-        },
-        {
-          "loc": [
-            "body",
-            "last_name"
-          ],
-          "msg": "ensure this value has at least 2 characters",
-          "type": "value_error.any_str.min_length",
-          "ctx": {
-            "limit_value": 2
-          }
-        },
-        {
-          "loc": [
-            "body",
-            "email"
-          ],
-          "msg": "value is not a valid email address",
-          "type": "value_error.email"
-        },
-        {
-          "loc": [
-            "body",
-            "position"
-          ],
-          "msg": "ensure this value has at most 45 characters",
-          "type": "value_error.any_str.max_length",
-          "ctx": {
-            "limit_value": 45
-          }
-        }
-      ]
+        "detail": [
+            {
+                "ctx": {
+                    "max_length": 30
+                },
+                "input": "thishastoomanycharactersthishastoomanycharacters",
+                "loc": [
+                    "body",
+                    "first_name"
+                ],
+                "msg": "String should have at most 30 characters",
+                "type": "string_too_long",
+                "url": "https://errors.pydantic.dev/2.6/v/string_too_long"
+            },
+            {
+                "ctx": {
+                    "min_length": 2
+                },
+                "input": "a",
+                "loc": [
+                    "body",
+                    "last_name"
+                ],
+                "msg": "String should have at least 2 characters",
+                "type": "string_too_short",
+                "url": "https://errors.pydantic.dev/2.6/v/string_too_short"
+            },
+            {
+                "ctx": {
+                    "reason": "The part after the @-sign is not valid. It "
+                              "should have a period."
+                },
+                "input": "foo@example",
+                "loc": [
+                    "body",
+                    "email"
+                ],
+                "msg": "value is not a valid email address: The part after the "
+                       "@-sign is not valid. It should have a period.",
+                "type": "value_error"
+            },
+            {
+                "ctx": {
+                    "max_length": 45
+                },
+                "input": "thishastoomanycharactersthishastoomanycharacters",
+                "loc": [
+                    "body",
+                    "position"
+                ],
+                "msg": "String should have at most 45 characters",
+                "type": "string_too_long",
+                "url": "https://errors.pydantic.dev/2.6/v/string_too_long"
+            }
+        ]
     }
 
 
@@ -266,32 +285,46 @@ def test_resource_put_extra_and_missing_fields():
                           })
     assert response.status_code == 422
     assert response.json() == {
-      "detail": [
-        {
-          "loc": [
-            "body",
-            "first_name"
-          ],
-          "msg": "field required",
-          "type": "value_error.missing"
-        },
-        {
-          "loc": [
-            "body",
-            "position"
-          ],
-          "msg": "field required",
-          "type": "value_error.missing"
-        },
-        {
-          "loc": [
-            "body",
-            "extra"
-          ],
-          "msg": "extra fields not permitted",
-          "type": "value_error.extra"
-        }
-      ]
+        "detail": [
+            {
+                "input": {
+                    "email": "foo@example.com",
+                    "extra": "extra data",
+                    "last_name": "bar"
+                },
+                "loc": [
+                    "body",
+                    "first_name"
+                ],
+                "msg": "Field required",
+                "type": "missing",
+                "url": "https://errors.pydantic.dev/2.6/v/missing"
+            },
+            {
+                "input": {
+                    "email": "foo@example.com",
+                    "extra": "extra data",
+                    "last_name": "bar"
+                },
+                "loc": [
+                    "body",
+                    "position"
+                ],
+                "msg": "Field required",
+                "type": "missing",
+                "url": "https://errors.pydantic.dev/2.6/v/missing"
+            },
+            {
+                "input": "extra data",
+                "loc": [
+                    "body",
+                    "extra"
+                ],
+                "msg": "Extra inputs are not permitted",
+                "type": "extra_forbidden",
+                "url": "https://errors.pydantic.dev/2.6/v/extra_forbidden"
+            }
+        ]
     }
 
 
@@ -328,16 +361,31 @@ def test_resource_patch_extra_data():
                           })
     assert response.status_code == 422
     assert response.json() == {
-      "detail": [
-        {
-          "loc": [
-            "body",
-            "extra"
-          ],
-          "msg": "extra fields not permitted",
-          "type": "value_error.extra"
-        }
-      ]
+        "detail": [
+            {
+                "input": {
+                    "extra": "some extra data",
+                    "position": "manager"
+                },
+                "loc": [
+                    "body",
+                    "email"
+                ],
+                "msg": "Field required",
+                "type": "missing",
+                "url": "https://errors.pydantic.dev/2.6/v/missing"
+            },
+            {
+                "input": "some extra data",
+                "loc": [
+                    "body",
+                    "extra"
+                ],
+                "msg": "Extra inputs are not permitted",
+                "type": "extra_forbidden",
+                "url": "https://errors.pydantic.dev/2.6/v/extra_forbidden"
+            }
+        ]
     }
 
 
