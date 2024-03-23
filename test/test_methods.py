@@ -363,19 +363,6 @@ def test_resource_patch_extra_data():
     assert response.json() == {
         "detail": [
             {
-                "input": {
-                    "extra": "some extra data",
-                    "position": "manager"
-                },
-                "loc": [
-                    "body",
-                    "email"
-                ],
-                "msg": "Field required",
-                "type": "missing",
-                "url": "https://errors.pydantic.dev/2.6/v/missing"
-            },
-            {
                 "input": "some extra data",
                 "loc": [
                     "body",

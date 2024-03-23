@@ -25,7 +25,7 @@ class UserUpdate(BaseModel):
     """schema for update-user input body"""
     first_name: Optional[str] = Field(None, min_length=2, max_length=30, pattern=LETTERS_PLUS_DASH)
     last_name: Optional[str] = Field(None, min_length=2, max_length=30, pattern=LETTERS_PLUS_DASH)
-    email: Optional[EmailStr]
+    email: Optional[EmailStr] | None = None
     position: Optional[str] = Field(None, min_length=3, max_length=45, pattern=LETTERS_PLUS_DASH)
 
     model_config = ConfigDict(extra='forbid', str_strip_whitespace=True)
@@ -173,7 +173,7 @@ def patch_resource_userid(user: UserUpdate, response: Response,
                                             )
                          ):
     """
-    Patch will makle changes only for the data you supply.
+    Patch will make changes only for the data you supply.
 
     Will confirm that a valid {userid} is supplied.
     If no updated info is provided for a field, it will not be modified.
