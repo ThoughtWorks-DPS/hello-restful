@@ -1,5 +1,5 @@
 """
-hello-restful api
+The hello-restful api
 
 An example of a RESTful API written in Python using FastAPI. Modeled after httobin,
 but with some api resources definitions useful for misc mocks and other testing.
