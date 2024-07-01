@@ -12,7 +12,7 @@
 
 hello-restful is a small, fastapi service designed to be deployed on kubernetes and provide common http request/response endpoints and demonstrate using an openapi framework for automated api documentation.  
 
-Access at [https://twdps.io/v1/hello](https://twdps.io/v1/hello). OAS documentation [here](https://twdps.io/v1/hello/apidocs).  
+Access at [https://twdps.io/v1/hello](https://twdps.io/v1/hello). OAS documentation [here](https://twdps.io/v1/hello/apidocs).  _pending_
 
 To run locally on docker:    
 ```bash
