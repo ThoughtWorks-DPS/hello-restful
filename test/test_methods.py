@@ -168,8 +168,7 @@ def test_resource_post_extra_data():
                     "position"
                 ],
                 "msg": "Field required",
-                "type": "missing",
-                "url": "https://errors.pydantic.dev/2.6/v/missing"
+                "type": "missing"
             }
         ]
     }
@@ -198,8 +197,7 @@ def test_resource_post_model_validators():
                     "first_name"
                 ],
                 "msg": "String should have at most 30 characters",
-                "type": "string_too_long",
-                "url": "https://errors.pydantic.dev/2.6/v/string_too_long"
+                "type": "string_too_long"
             },
             {
                 "ctx": {
@@ -211,8 +209,7 @@ def test_resource_post_model_validators():
                     "last_name"
                 ],
                 "msg": "String should have at least 2 characters",
-                "type": "string_too_short",
-                "url": "https://errors.pydantic.dev/2.6/v/string_too_short"
+                "type": "string_too_short"
             },
             {
                 "ctx": {
@@ -238,8 +235,7 @@ def test_resource_post_model_validators():
                     "position"
                 ],
                 "msg": "String should have at most 45 characters",
-                "type": "string_too_long",
-                "url": "https://errors.pydantic.dev/2.6/v/string_too_long"
+                "type": "string_too_long"
             }
         ]
     }
@@ -297,8 +293,7 @@ def test_resource_put_extra_and_missing_fields():
                     "first_name"
                 ],
                 "msg": "Field required",
-                "type": "missing",
-                "url": "https://errors.pydantic.dev/2.6/v/missing"
+                "type": "missing"
             },
             {
                 "input": {
@@ -311,8 +306,7 @@ def test_resource_put_extra_and_missing_fields():
                     "position"
                 ],
                 "msg": "Field required",
-                "type": "missing",
-                "url": "https://errors.pydantic.dev/2.6/v/missing"
+                "type": "missing"
             },
             {
                 "input": "extra data",
@@ -321,8 +315,7 @@ def test_resource_put_extra_and_missing_fields():
                     "extra"
                 ],
                 "msg": "Extra inputs are not permitted",
-                "type": "extra_forbidden",
-                "url": "https://errors.pydantic.dev/2.6/v/extra_forbidden"
+                "type": "extra_forbidden"
             }
         ]
     }
@@ -369,8 +362,7 @@ def test_resource_patch_extra_data():
                     "extra"
                 ],
                 "msg": "Extra inputs are not permitted",
-                "type": "extra_forbidden",
-                "url": "https://errors.pydantic.dev/2.6/v/extra_forbidden"
+                "type": "extra_forbidden"
             }
         ]
     }

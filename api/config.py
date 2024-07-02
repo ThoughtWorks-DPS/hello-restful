@@ -5,6 +5,7 @@ api base configuration
 """
 import os
 from pydantic_settings import BaseSettings
+from pydantic import Field
 
 DESCRIPTION = """
 <a href="https://github.com/ThoughtWorks-DPS/hello-restful"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ThoughtWorks-DPS/hello-restful"></a> <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/ThoughtWorks-DPS/hello-restful"></a>
@@ -26,7 +27,7 @@ class Settings(BaseSettings):
     description: str = DESCRIPTION
     prefix: str = "/hello"
     debug: bool = False
-    releaseId: str = os.environ.get("API_VERSION")
+    releaseId: str = Field(default_factory=lambda: os.environ.get("API_VERSION", "snapshot"))
     version: str = "v1"
     server_info_url: str = "http://localhost:15000/server_info"
 
