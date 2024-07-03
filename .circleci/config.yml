@@ -8,7 +8,7 @@ orbs:
 # ==== global pipeline parameters
 
 globals:
-  - &context twdps-core-labs-team
+  - &context empc-lab
   - &shell op run --env-file op.env -- /bin/bash -eo pipefail
   - &executor-image twdps/circleci-python-builder:4.0.0
   - &package-manager pip
