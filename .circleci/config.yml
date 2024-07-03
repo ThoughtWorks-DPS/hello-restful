@@ -106,7 +106,7 @@ workflows:
           name: static code analysis
           context: *context
           shell: *shell
-          image: *executor-image
+          executor-image: *executor-image
           package-manager: *package-manager
           install-dev: true
           lint-path: api
