@@ -3,6 +3,7 @@ version: 2.1
 
 orbs:
   python: twdps/python-api@dev:alpha
+  op: twdps/onepassword@3.0.0
   cosign: twdps/cosign@0.1.0
 
 # ==== global pipeline parameters
@@ -40,22 +41,26 @@ commands:
         type: string
         default: dev.${CIRCLE_SHA1:0:7}
     steps:
+      - op/env
       - run:
-          name: set environment
+          name: set version var
           command: |
-            op inject -i op.env -o $BASH_ENV
             echo "export API_VERSION=<< parameters.tag >>" >> $BASH_ENV
             source $BASH_ENV
-            op inject -i tpl/cosign.key.tpl -o cosign.key
-            op inject -i tpl/cosign.pub.tpl -o cosign.pub
-      - when:
-          condition: << parameters.cluster >>
-          steps:
-            - run:
-                name: set ~/.kube/config
-                command: |
-                  mkdir -p ~/.kube
-                  ENV=<< parameters.cluster >> op inject -i tpl/kubeconfig.tpl -o ~/.kube/config
+      - op/write-to-file:
+          op-value: empc-lab/svc-cosign-private-key/notesPlain
+          out-file: cosign.key
+      - op/write-to-file:
+          op-value: empc-lab/svc-cosign-public-key/notesPlain
+          out-file: cosign.pub
+      # - when:
+      #     condition: << parameters.cluster >>
+      #     steps:
+      #       - run:
+      #           name: set ~/.kube/config
+      #           command: |
+      #             mkdir -p ~/.kube
+      #             ENV=<< parameters.cluster >> op inject -i tpl/kubeconfig.tpl -o ~/.kube/config
 
 jobs:
 
@@ -119,24 +124,24 @@ workflows:
                   source $BASH_ENV
           filters: *on-push-main
 
-      # - python/oci-image-build:
-      #     name: build multi-arch image
-      #     context: *context
-      #     image: *image
-      #     registry: *registry
-      #     image-cve-scan: true
-      #     snyk-organization: twdps
-      #     health-url: "http://0.0.0.0:8000/v1/hello/healthz"
-      #     port-definition: "8000:8000"
-      #     docker-run-arguments: "-e API_VERSION=dev.${CIRCLE_SHA1:0:7}"
-      #     before-build:
-      #       - python/configure-machine:
-      #           op-version: 2.18.0-beta.01
-      #           snyk-version: '1.1184.0'
-      #       - set-environment
-      #     requires:
-      #       - static code analysis
-      #     filters: *on-push-main
+      - python/oci-image-build:
+          name: build multi-arch image
+          context: *context
+          image: *image
+          registry: *registry
+          image-cve-scan: true
+          snyk-organization: twdps
+          health-url: "http://0.0.0.0:8000/v1/hello/healthz"
+          port-definition: "8000:8000"
+          docker-run-arguments: "-e API_VERSION=dev.${CIRCLE_SHA1:0:7}"
+          before-build:
+            - python/configure-machine:
+                op-version: 2.29.0
+                snyk-version: '1.1292.1'
+            - set-environment
+          requires:
+            - static code analysis
+          filters: *on-push-main
 
   #     - deploy-hello-restful:
   #         name: dev deployment
