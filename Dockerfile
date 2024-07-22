@@ -1,4 +1,4 @@
-FROM python:3.12-alpine
+FROM python:3.20-alpine
 
 LABEL org.opencontainers.image.title="hello-restful" \
       org.opencontainers.image.description="Lightweight API providing request and response endpoints" \
