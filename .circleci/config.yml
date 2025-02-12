@@ -4,9 +4,7 @@ version: 2.1
 orbs:
   python: twdps/python-api@dev:alpha
   op: twdps/onepassword@3.0.0
-  cosign: twdps/cosign@0.1.0
-
-# ==== global pipeline parameters
+  cosign: twdps/cosign@0.1.1
 
 globals:
   - &context empc-lab
@@ -124,24 +122,24 @@ workflows:
                   source $BASH_ENV
           filters: *on-push-main
 
-      - python/oci-image-build:
-          name: build multi-arch image
-          context: *context
-          image: *image
-          registry: *registry
-          image-cve-scan: true
-          snyk-organization: twdps
-          health-url: "http://0.0.0.0:8000/v1/hello/healthz"
-          port-definition: "8000:8000"
-          docker-run-arguments: "-e API_VERSION=dev.${CIRCLE_SHA1:0:7}"
-          before-build:
-            - python/configure-machine:
-                op-version: 2.29.0
-                snyk-version: '1.1292.1'
-            - set-environment
-          requires:
-            - static code analysis
-          filters: *on-push-main
+      # - python/oci-image-build:
+      #     name: build multi-arch image
+      #     context: *context
+      #     image: *image
+      #     registry: *registry
+      #     image-cve-scan: true
+      #     snyk-organization: twdps
+      #     health-url: "http://0.0.0.0:8000/v1/hello/healthz"
+      #     port-definition: "8000:8000"
+      #     docker-run-arguments: "-e API_VERSION=dev.${CIRCLE_SHA1:0:7}"
+      #     before-build:
+      #       - python/configure-machine:
+      #           op-version: 2.29.0
+      #           snyk-version: '1.1292.1'
+      #       - set-environment
+      #     requires:
+      #       - static code analysis
+      #     filters: *on-push-main
 
   #     - deploy-hello-restful:
   #         name: dev deployment

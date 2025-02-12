@@ -1,12 +1,16 @@
 FROM python:3.12-alpine
 
-LABEL org.opencontainers.image.title="hello-restful" \
-      org.opencontainers.image.description="Lightweight API providing request and response endpoints" \
+LABEL org.opencontainers.image.created="%%CREATED%%" \
+      org.opencontainers.image.authors="nic.cheneweth@thoughtworks.com" \
       org.opencontainers.image.documentation="https://github.com/ThoughtWorks-DPS/hello-restful" \
       org.opencontainers.image.source="https://github.com/ThoughtWorks-DPS/hello-restful" \
       org.opencontainers.image.url="https://github.com/ThoughtWorks-DPS/hello-restful" \
+      org.opencontainers.image.version="%%VERSION%%" \
       org.opencontainers.image.vendor="ThoughtWorks, Inc." \
-      org.opencontainers.image.licenses="MIT"
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.title="hello-restful" \
+      org.opencontainers.image.description="Lightweight API providing request and response endpoints" \
+      org.opencontainers.image.base.name="%%BASE%%"
 
 ENV MUSL_LOCPATH=/usr/share/i18n/locales/musl \
     LANG="C.UTF-8" \
@@ -18,12 +22,12 @@ ENV MUSL_LOCPATH=/usr/share/i18n/locales/musl \
 RUN apk add --no-cache \
         libintl=0.22.5-r0 && \
     apk --no-cache add --virtual build-dependencies \
-        cmake==3.29.3-r0 \
+        cmake==3.31.1-r0 \
         make==4.4.1-r2 \
-        musl==1.2.5-r0 \
-        musl-dev==1.2.5-r0 \
-        musl-utils==1.2.5-r0 \
-        gcc==13.2.1_git20240309-r0 \
+        musl==1.2.5-r8 \
+        musl-dev==1.2.5-r8 \
+        musl-utils==1.2.5-r8 \
+        gcc==14.2.0-r4 \
         gettext-dev==0.22.5-r0 && \
     wget -q https://gitlab.com/rilian-la-te/musl-locales/-/archive/master/musl-locales-master.zip && \
     unzip musl-locales-master.zip && cd musl-locales-master && \

@@ -1,6 +1,6 @@
-pytest == 8.2.2
-pylint == 3.2.5
-coverage == 7.5.4
+pytest == 8.3.4
+pylint == 3.3.4
+coverage == 7.6.12
 pre-commit == 3.7.1
-httpx == 0.27.0
+httpx == 0.28.1
 mock == 5.1.0

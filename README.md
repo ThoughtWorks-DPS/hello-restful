@@ -1,9 +1,9 @@
 <div align="center">
-	<p>
-		<img alt="Thoughtworks Logo" src="https://raw.githubusercontent.com/ThoughtWorks-DPS/static/master/thoughtworks_flamingo_wave.png?sanitize=true" width=200 />
+  <p>
+    <img alt="Thoughtworks Logo" src="https://raw.githubusercontent.com/ThoughtWorks-DPS/static/master/thoughtworks_flamingo_wave.png?sanitize=true" width=200 />
     <br />
-		<img alt="DPS Title" src="https://raw.githubusercontent.com/ThoughtWorks-DPS/static/master/dps_lab_title.png" width=350/>
-	</p>
+    <img alt="DPS Title" src="https://raw.githubusercontent.com/ThoughtWorks-DPS/static/master/dps_lab_title.png" width=350/>
+  </p>
   <h3>Lightweight API providing request and response endpoints</h3>
   <h1>hello-restful</h1>
   <a href="https://app.circleci.com/pipelines/github/ThoughtWorks-DPS/hello-restful"><img src="https://circleci.com/gh/ThoughtWorks-DPS/hello-restful.svg?style=shield"></a> <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/ThoughtWorks-DPS/circleci-remote-docker"></a>
@@ -25,5 +25,5 @@ Access on http://localhost:8000/v1/hello
 **run locally with uvicorn**  
 
 ```
-$ uvicorn api.main:api --reload
+uvicorn api.main:api --reload
 ```
