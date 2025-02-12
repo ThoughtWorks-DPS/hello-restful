@@ -113,7 +113,7 @@ workflows:
           package-manager: *package-manager
           install-dev: true
           lint-path: api
-          report-coverage: codeclimate
+          report-coverage: codacy
           after-checkout:
             - run:
                 name: set API_VERSION
