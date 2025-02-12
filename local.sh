@@ -16,7 +16,7 @@ case $MODE in
 
   "t")
     helm template hello-restful charts/hello-restful \
-      --namespace demo-$ENV \
+      --namespace" demo-$ENV" \
       --values charts/hello-restful/values.yaml \
       --values "charts/hello-restful/values-$ENV.yaml" \
       --set image.tag=dev.aa7da86
