@@ -34,11 +34,7 @@ strategy:
     maxSurge: 100%
     maxUnavailable: 50%
 
-podSecurityContext:
-  seccompProfile:
-    type: RuntimeDefault
-  capabilities:
-    drop: ["ALL"]
+podSecurityContext: {}
 
 securityContext:
   allowPrivilegeEscalation: false
@@ -46,6 +42,10 @@ securityContext:
   runAsNonRoot: true
   runAsUser: 65532
   runAsGroup: 65532
+  seccompProfile:
+    type: RuntimeDefault
+  capabilities:
+    drop: ["ALL"]
 
 resources:
   limits:
