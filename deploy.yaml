@@ -74,13 +74,16 @@ spec:
         - name: hello-restful
           securityContext:
             allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 65532
+            runAsGroup: 65532
             capabilities:
               drop:
               - ALL
-            readOnlyRootFilesystem: true
             seccompProfile:
               type: RuntimeDefault
-          image: "ghcr.io/thoughtworks-dps/hello-restful:dev.1c77502"
+          image: "ghcr.io/thoughtworks-dps/hello-restful:dev.eabf8d2"
           imagePullPolicy: IfNotPresent
           ports:
             - name: hello-restful
