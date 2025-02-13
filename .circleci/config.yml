@@ -144,7 +144,7 @@ workflows:
       - deploy-hello-restful:
           name: dev deployment
           context: *context
-          cluster: prod-us-east-2
+          cluster: prod-i01-aws-us-east-2
           namespace: dev
           tag: dev.${CIRCLE_SHA1:0:7}
           requires:
