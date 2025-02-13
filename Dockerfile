@@ -38,14 +38,21 @@ RUN apk add --no-cache \
     adduser -D hello && \
     apk del build-dependencies
 
-USER hello
-WORKDIR /home/hello
-ENV PATH="/home/hello/.local/bin:${PATH}"
+WORKDIR /opt/app
+COPY api/ api/
+COPY requirements.txt requirements.txt
 
-COPY --chown=hello:hello api/ api/
-COPY --chown=hello:hello requirements.txt requirements.txt
-RUN pip install --user --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+RUN chmod -R 777 /opt/app
 
 ENTRYPOINT ["uvicorn", "api.main:api", "--host", "0.0.0.0", "--port", "8000"]
-#CMD ["uvicorn", "api.main:api", "--host", "0.0.0.0", "--port", "8000"]
-#ENTRYPOINT ["python", "-m", "uvicorn", "api.main:api", "--host", "0.0.0.0", "--port", "8000"]
+
+# USER hello
+# WORKDIR /home/hello
+# ENV PATH="/home/hello/.local/bin:${PATH}"
+
+# COPY --chown=hello:hello api/ api/
+# COPY --chown=hello:hello requirements.txt requirements.txt
+# RUN pip install --user --no-cache-dir -r requirements.txt
+
+# ENTRYPOINT ["uvicorn", "api.main:api", "--host", "0.0.0.0", "--port", "8000"]

@@ -78,12 +78,9 @@ spec:
               drop:
               - ALL
             readOnlyRootFilesystem: true
-            runAsGroup: 65532
-            runAsNonRoot: true
-            runAsUser: 65532
             seccompProfile:
               type: RuntimeDefault
-          image: "ghcr.io/thoughtworks-dps/hello-restful:dev.ce1e002"
+          image: "ghcr.io/thoughtworks-dps/hello-restful:dev.1c77502"
           imagePullPolicy: IfNotPresent
           ports:
             - name: hello-restful
