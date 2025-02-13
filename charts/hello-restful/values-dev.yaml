@@ -8,21 +8,9 @@ virtualService:
     - istio-system/dev-twdps-io-gateway
   matchUrl: /v1/hello
 
-strategy: 
-  type: RollingUpdate
-  rollingUpdate:
-    maxSurge: 100%
-    maxUnavailable: 50%
-
-securityContext:
-  allowPrivilegeEscalation: false
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  runAsUser: 65532
-
 autoscaling:
   enabled: true
-  minReplicas: 2
+  minReplicas: 1
   maxReplicas: 3
   utilizationMethod: memory
   targetUtilizationPercentage: 80
@@ -30,19 +18,3 @@ autoscaling:
 podDisruptionBudget: 
   create: true
   maxUnavailable: 1
-
-affinity: {}
-
-topologySpreadConstraints:
-  - maxSkew: 3
-    topologyKey: "topology.kubernetes.io/zone"
-    whenUnsatisfiable: ScheduleAnyway
-    labelSelector:
-      matchLabels:
-        app.kubernetes.io/name: hello-restful
-  - maxSkew: 3
-    topologyKey: "kubernetes.io/hostname"
-    whenUnsatisfiable: ScheduleAnyway
-    labelSelector:
-      matchLabels:
-        app.kubernetes.io/name: hello-restful

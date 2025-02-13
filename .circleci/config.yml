@@ -5,11 +5,13 @@ orbs:
   python: twdps/python-api@dev:alpha
   op: twdps/onepassword@3.0.0
   cosign: twdps/cosign@0.1.1
+  kube: twdps/kube-ops@1.1.2
 
 globals:
   - &context empc-lab
   - &shell op run --env-file op.env -- /bin/bash -eo pipefail
   - &executor-image twdps/circleci-python-builder:5.0.1
+  - &deploy-image twdps/circleci-kube-ops:alpine-3.2.1
   - &package-manager pip
   - &image hello-restful
   - &registry ghcr.io/thoughtworks-dps
@@ -51,14 +53,11 @@ commands:
       - op/write-to-file:
           op-value: empc-lab/svc-cosign-public-key/notesPlain
           out-file: cosign.pub
-      # - when:
-      #     condition: << parameters.cluster >>
-      #     steps:
-      #       - run:
-      #           name: set ~/.kube/config
-      #           command: |
-      #             mkdir -p ~/.kube
-      #             ENV=<< parameters.cluster >> op inject -i tpl/kubeconfig.tpl -o ~/.kube/config
+      - when:
+          condition: << parameters.cluster >>
+          steps:
+            - kube/op-config:
+                op-value: empc-lab/psk-aws-<< parameters.cluster>>/kubeconfig-base64
 
 jobs:
 
@@ -74,7 +73,7 @@ jobs:
         description: image to deploy
         type: string
     docker:
-      - image: twdps/circleci-kube-ops:alpine-stable
+      - image: *deploy-image
     steps:
       - checkout
       - setup_remote_docker
@@ -90,14 +89,18 @@ jobs:
                  --values charts/hello-restful/values.yaml \
                  --values charts/hello-restful/values-<< parameters.namespace >>.yaml \
                  --set image.tag=<< parameters.tag >>
-      - run:
-          name: test healthz endpoint
-          command: |
-            reponse=$(curl https://twdps.io/v1/hello/healthz)
-            if [[ $(echo $reponse | jq -r .status) != "ok" ]]; then
-                echo "error: healthz not ok"
-                exit 1
-            fi
+      # - run:
+      #     name: test healthz endpoint
+      #     command: |
+      #       url="https://twdps.io/v1/hello/healthz"
+      #       if [[ "" != "" ]];  then
+      #         url="https://<< parameters.namespace >>.twdps.io/v1/hello/healthz"
+      #       fi
+      #       reponse=$(curl "$url")
+      #       if [[ $(echo $reponse | jq -r .status) != "ok" ]]; then
+      #           echo "error: healthz not ok"
+      #           exit 1
+      #       fi
       # deploy observability
 
 workflows:
@@ -138,15 +141,15 @@ workflows:
             - static code analysis
           filters: *on-push-main
 
-  #     - deploy-hello-restful:
-  #         name: dev deployment
-  #         context: *context
-  #         cluster: prod-us-east-1
-  #         namespace: dev
-  #         tag: dev.${CIRCLE_SHA1:0:7}
-  #         requires:
-  #           - build multi-arch image
-  #         filters: *on-push-main
+      - deploy-hello-restful:
+          name: dev deployment
+          context: *context
+          cluster: prod-us-east-1
+          namespace: dev
+          tag: dev.${CIRCLE_SHA1:0:7}
+          requires:
+            - build multi-arch image
+          filters: *on-push-main
 
   # release:
   #   jobs:

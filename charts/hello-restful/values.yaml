@@ -28,16 +28,24 @@ image:
   tag: ""
   pullPolicy: IfNotPresent
 
-strategy: {}
-  # type: RollingUpdate
-  # rollingUpdate:
-  #   maxSurge: 25%
-  #   maxUnavailable: 25%
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 100%
+    maxUnavailable: 50%
 
+podSecurityContext:
+  seccompProfile:
+    type: RuntimeDefault
+  capabilities:
+    drop: ["ALL"]
 
-podSecurityContext: {}
-
-securityContext: {}
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 65532
+  runAsGroup: 65532
 
 resources:
   limits:
@@ -50,14 +58,15 @@ resources:
 # required for podDisruptionBudget
 autoscaling:
   enabled: false
-  # minReplicas: 2
+  # minReplicas: 1
   # maxReplicas: 3
   # utilizationMethod: memory
   # targetUtilizationPercentage: 80
 
 affinity: {}
 
-nodeSelector: {}
+nodeSelector:
+  kubernetes.io/arch: arm64
 
 tolerations: []
 
@@ -65,5 +74,4 @@ topologySpreadConstraints: {}
 
 podDisruptionBudget: 
   create: false
-  # only supported
-  # maxUnavailable:
+  # maxUnavailable: 1
