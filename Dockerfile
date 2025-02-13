@@ -25,9 +25,9 @@ RUN apk add --no-cache \
     apk --no-cache add --virtual build-dependencies \
         cmake==3.31.1-r0 \
         make==4.4.1-r2 \
-        musl==1.2.5-r8 \
-        musl-dev==1.2.5-r8 \
-        musl-utils==1.2.5-r8 \
+        musl==1.2.5-r9 \
+        musl-dev==1.2.5-r9 \
+        musl-utils==1.2.5-r9 \
         gcc==14.2.0-r4 \
         gettext-dev==0.22.5-r0 && \
     wget -q https://gitlab.com/rilian-la-te/musl-locales/-/archive/master/musl-locales-master.zip && \
