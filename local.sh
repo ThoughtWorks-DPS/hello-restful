@@ -7,22 +7,24 @@ export MODE="$2"
 case $MODE in
 
   "d")
-    helm upgrade --install --atomic --timeout 30s hello-restful charts/hello-restful \
+    helm upgrade --install hello-restful charts/hello-restful \
       --namespace "demo-$ENV" \
       --values charts/hello-restful/values.yaml \
       --values "charts/hello-restful/values-$ENV.yaml" \
-      --set image.tag=dev.7cd4bea
+      --set image.tag=dev.ed5d3e7
     ;;
 
   "t")
     helm template hello-restful charts/hello-restful \
-      --namespace" demo-$ENV" \
+      --namespace "demo-$ENV" \
       --values charts/hello-restful/values.yaml \
       --values "charts/hello-restful/values-$ENV.yaml" \
-      --set image.tag=dev.aa7da86
+      --set image.tag=dev.ed5d3e7
     ;;
 
   *)
     echo "no or unsupported mode flag"
     ;;
 esac
+
+# --atomic --timeout 30s 

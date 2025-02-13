@@ -11,4 +11,6 @@ dockerconfig.json
 source.env
 kubeconfig
 test.sh
+temp.yaml
+
 charts/hello-restful/values-bryan-lab.yaml

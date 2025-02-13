@@ -44,6 +44,6 @@ ENV PATH="/home/hello/.local/bin:${PATH}"
 
 COPY --chown=hello:hello api/ api/
 COPY --chown=hello:hello requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --user --no-cache-dir -r requirements.txt
 
 CMD ["uvicorn", "api.main:api", "--host", "0.0.0.0", "--port", "8000"]
