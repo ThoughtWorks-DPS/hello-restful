@@ -133,9 +133,6 @@ workflows:
           port-definition: "8000:8000"
           docker-run-arguments: "-e API_VERSION=dev.${CIRCLE_SHA1:0:7}"
           before-build:
-            # - python/configure-machine:
-            #     op-version: 2.30.0
-            #     snyk-version: '1.1292.1'
             - set-environment
           requires:
             - static code analysis
@@ -188,4 +185,3 @@ workflows:
   #         requires:
   #           - approve-prod
   #         filters: *on-tag-main
-  
