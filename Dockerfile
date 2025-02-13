@@ -46,4 +46,6 @@ COPY --chown=hello:hello api/ api/
 COPY --chown=hello:hello requirements.txt requirements.txt
 RUN pip install --user --no-cache-dir -r requirements.txt
 
-CMD ["uvicorn", "api.main:api", "--host", "0.0.0.0", "--port", "8000"]
+ENTRYPOINT ["uvicorn", "api.main:api", "--host", "0.0.0.0", "--port", "8000"]
+#CMD ["uvicorn", "api.main:api", "--host", "0.0.0.0", "--port", "8000"]
+#ENTRYPOINT ["python", "-m", "uvicorn", "api.main:api", "--host", "0.0.0.0", "--port", "8000"]

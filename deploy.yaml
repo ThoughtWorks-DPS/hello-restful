@@ -83,7 +83,7 @@ spec:
             runAsUser: 65532
             seccompProfile:
               type: RuntimeDefault
-          image: "ghcr.io/thoughtworks-dps/hello-restful:dev.ed5d3e7"
+          image: "ghcr.io/thoughtworks-dps/hello-restful:dev.ce1e002"
           imagePullPolicy: IfNotPresent
           ports:
             - name: hello-restful
