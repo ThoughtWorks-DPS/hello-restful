@@ -89,19 +89,20 @@ jobs:
                  --values charts/hello-restful/values.yaml \
                  --values charts/hello-restful/values-<< parameters.namespace >>.yaml \
                  --set image.tag=<< parameters.tag >>
-      # - run:
-      #     name: test healthz endpoint    --atomic --timeout 60s 
-      #     command: |
-      #       url="https://twdps.io/v1/hello/healthz"
-      #       if [[ "" != "" ]];  then
-      #         url="https://<< parameters.namespace >>.twdps.io/v1/hello/healthz"
-      #       fi
-      #       reponse=$(curl "$url")
-      #       if [[ $(echo $reponse | jq -r .status) != "ok" ]]; then
-      #           echo "error: healthz not ok"
-      #           exit 1
-      #       fi
-      # deploy observability
+      - run:
+          name: test healthz endpoint    --atomic --timeout 60s 
+          command: |
+            url="https://twdps.io/v1/hello/healthz"
+            if [[ "<< parameters.namespace >>" != "prod" ]];  then
+              url="https://<< parameters.namespace >>.twdps.io/v1/hello/healthz"
+            fi
+            reponse=$(curl "$url")
+            if [[ $(echo $reponse | jq -r .version) != "<< parameters.tag >>" ]]; then
+                echo "error: healthz not ok"
+                exit 1
+            fi
+
+      # TODO: Deploy observability dashboard, monitoring, and alerting
 
 workflows:
   version: 2
