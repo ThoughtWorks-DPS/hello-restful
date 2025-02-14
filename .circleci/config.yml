@@ -85,7 +85,7 @@ jobs:
           command: |
             helm upgrade hello-restful charts/hello-restful \
                  --install --atomic --timeout 60s \
-                 --namespace demo-<< parameters.namespace>> \
+                 --namespace demo-<< parameters.namespace >> \
                  --values charts/hello-restful/values.yaml \
                  --values charts/hello-restful/values-<< parameters.namespace >>.yaml \
                  --set image.tag=<< parameters.tag >>
@@ -176,19 +176,28 @@ workflows:
             - publish release candidate
           filters: *on-tag-main
 
-  #     - approve-prod:
-  #         type: approval
-  #         requires:
-  #           - qa deployment
-  #         filters: *on-tag-main
+      - deploy-hello-restful:
+          name: preview deployment
+          context: *context
+          cluster: sbx-i01-aws-us-east-1
+          namespace: preview
+          tag: $CIRCLE_TAG
+          requires:
+            - publish release candidate
+          filters: *on-tag-main
 
-  #     - deploy-hello-restful:
-  #         name: prod deployment
-  #         context: *context
-  #         cluster: prod-us-east-1
-  #         namespace: prod
-  #         tag: $CIRCLE_TAG
-  #         requires:
-  #           - approve-prod
-  #         filters: *on-tag-main
-  
+      - approve-prod:
+          type: approval
+          requires:
+            - qa deployment
+          filters: *on-tag-main
+
+      - deploy-hello-restful:
+          name: prod deployment
+          context: *context
+          cluster: prod-i01-aws-us-east-2
+          namespace: prod
+          tag: $CIRCLE_TAG
+          requires:
+            - approve-prod
+          filters: *on-tag-main
