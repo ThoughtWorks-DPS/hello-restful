@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-environment= "$1"
+environment="$1"
 tag="$2"
 
 echo "deploy hello-restful:$tag to demo-$environment"
