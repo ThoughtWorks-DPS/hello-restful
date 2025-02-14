@@ -1,0 +1,20 @@
+# values.yaml includes preview settings
+
+virtualService:
+  create: true
+  hosts:
+    - preview.twdps.io
+  gateways:
+    - istio-system/preview-twdps-io-gateway
+  matchUrl: /v1/hello
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  utilizationMethod: memory
+  targetUtilizationPercentage: 80
+
+podDisruptionBudget: 
+  create: true
+  maxUnavailable: 1
