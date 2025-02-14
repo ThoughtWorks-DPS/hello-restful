@@ -11,7 +11,7 @@ case $MODE in
       --namespace "demo-$ENV" \
       --values charts/hello-restful/values.yaml \
       --values "charts/hello-restful/values-$ENV.yaml" \
-      --set image.tag=0.4.2
+      --set image.tag=dev.66162d7
     ;;
 
   "t")
