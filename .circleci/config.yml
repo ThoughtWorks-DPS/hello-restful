@@ -104,7 +104,6 @@ jobs:
                 echo "error: healthz not ok"
                 exit 1
             fi
-
       # TODO: Deploy observability dashboard, monitoring, and alerting
 
 workflows:
@@ -155,27 +154,27 @@ workflows:
             - build multi-arch image
           filters: *on-push-main
 
-  # release:
-  #   jobs:
-  #     - python/publish-image:
-  #         name: publish release candidate
-  #         context: *context
-  #         image: *image
-  #         registry: *registry
-  #         publish-tag: $CIRCLE_TAG
-  #         before-push:
-  #           - set-environment
-  #         filters: *on-tag-main
+  release:
+    jobs:
+      - python/publish-image:
+          name: publish release candidate
+          context: *context
+          image: *image
+          registry: *registry
+          publish-tag: $CIRCLE_TAG
+          before-push:
+            - set-environment
+          filters: *on-tag-main
 
-  #     - deploy-hello-restful:
-  #         name: qa deployment
-  #         context: *context
-  #         cluster: prod-us-east-1
-  #         namespace: qa
-  #         tag: $CIRCLE_TAG
-  #         requires:
-  #           - publish release candidate
-  #         filters: *on-tag-main
+      - deploy-hello-restful:
+          name: qa deployment
+          context: *context
+          cluster: prod-i01-aws-us-east-2
+          namespace: qa
+          tag: $CIRCLE_TAG
+          requires:
+            - publish release candidate
+          filters: *on-tag-main
 
   #     - approve-prod:
   #         type: approval
