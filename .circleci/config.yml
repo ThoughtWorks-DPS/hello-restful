@@ -84,13 +84,13 @@ jobs:
           name: deploy hello-restful
           command: |
             helm upgrade hello-restful charts/hello-restful \
-                 --install \
+                 --install --atomic --timeout 60s \
                  --namespace demo-<< parameters.namespace>> \
                  --values charts/hello-restful/values.yaml \
                  --values charts/hello-restful/values-<< parameters.namespace >>.yaml \
                  --set image.tag=<< parameters.tag >>
       - run:
-          name: test healthz endpoint    --atomic --timeout 60s 
+          name: test healthz endpoint
           command: |
             url="https://twdps.io/v1/hello/healthz"
             if [[ "<< parameters.namespace >>" != "prod" ]];  then
