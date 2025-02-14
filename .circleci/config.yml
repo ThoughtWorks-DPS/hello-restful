@@ -64,13 +64,13 @@ jobs:
   deploy-hello-restful:
     parameters:
       cluster:
-        description: target cluster
+        description: Deploy to cluster role
         type: string
       namespace:
-        description: deploy to this env namespace
+        description: Deploy to environment
         type: string
       tag:
-        description: image to deploy
+        description: Deploy image version
         type: string
     docker:
       - image: *deploy-image
@@ -82,29 +82,13 @@ jobs:
           tag: << parameters.tag >>
       - run:
           name: deploy hello-restful
-          command: |
-            helm upgrade hello-restful charts/hello-restful \
-                 --install --atomic --timeout 60s \
-                 --namespace demo-<< parameters.namespace >> \
-                 --values charts/hello-restful/values.yaml \
-                 --values charts/hello-restful/values-<< parameters.namespace >>.yaml \
-                 --set image.tag=<< parameters.tag >>
+          command: bash scripts/deploy.sh << parameters.namespace >> << parameters.tag >>
       - run:
           name: test healthz endpoint
-          command: |
-            url="https://twdps.io/v1/hello/healthz"
-            if [[ "<< parameters.namespace >>" != "prod" ]];  then
-              url="https://<< parameters.namespace >>.twdps.io/v1/hello/healthz"
-            fi
-            echo "test $url for version=<< parameters.tag >>"
-            reponse=$(curl "$url")
-            version=$(echo $reponse | jq -r .version)
-            echo "version $version"
-            if [[ "$version" != "<< parameters.tag >>" ]]; then
-                echo "error: healthz not ok"
-                exit 1
-            fi
-      # TODO: Deploy observability dashboard, monitoring, and alerting
+          command: bash scripts/healthz_check.sh << parameters.namespace >> << parameters.tag >>
+      - run:
+          name: TODO - Deploy observability dashboard, monitoring, and alerting
+          command: echo "Placeholder for observability deployment"
 
 workflows:
   version: 2
