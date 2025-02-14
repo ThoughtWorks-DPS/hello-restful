@@ -6,7 +6,7 @@ but with some api resources definitions useful for misc mocks and other testing.
 """
 from fastapi import FastAPI
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-from .routes import inspection, status, methods, file_response, health, istio
+from .routes import inspection, status, methods, file_response, healthz, istio
 from .config import settings, route_prefix
 
 tags_metadata = [
@@ -46,7 +46,7 @@ api.include_router(inspection.route, prefix=route_prefix)
 api.include_router(status.route, prefix=route_prefix)
 api.include_router(methods.route, prefix=route_prefix)
 api.include_router(file_response.route, prefix=route_prefix)
-api.include_router(health.route, prefix=route_prefix)
+api.include_router(healthz.route, prefix=route_prefix)
 api.include_router(istio.route, prefix=route_prefix)
 
 
