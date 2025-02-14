@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-export env=$1
-export tag=$2
+env=$1
+tag=$2
 
 echo "deploy hello-restful:$tag to demo-$env"
 helm upgrade hello-restful charts/hello-restful \
