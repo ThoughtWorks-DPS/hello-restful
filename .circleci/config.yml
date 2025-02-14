@@ -82,10 +82,10 @@ jobs:
           tag: << parameters.tag >>
       - run:
           name: deploy hello-restful
-          command: bash scripts/deploy.sh << parameters.namespace >> << parameters.tag >>
+          command: bash scripts/deploy.sh "<< parameters.namespace >>" "<< parameters.tag >>"
       - run:
           name: test healthz endpoint
-          command: bash scripts/healthz_check.sh << parameters.namespace >> << parameters.tag >>
+          command: bash scripts/healthz_check.sh "<< parameters.namespace >>" "<< parameters.tag >>"
       - run:
           name: TODO - Deploy observability dashboard, monitoring, and alerting
           command: echo "Placeholder for observability deployment"
