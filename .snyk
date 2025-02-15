@@ -2,14 +2,5 @@
 version: v1.25.0
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  # low
-  # SNYK-ALPINE318-OPENSSL-5788370:
-  #   - '*':
-  #       reason: Checking excessively long DH keys or parameters may be very slow
-  #       expires: 2023-10-08T01:18:19.843Z
-  # SNYK-ALPINE318-OPENSSL-5776808:
-  #   - '*':
-  #       reason: ignore empty associated data entries which are unathenticated as a result
-  #       expires: 2023-10-08T01:18:19.843Z
 
 patch: {}
