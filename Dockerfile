@@ -45,13 +45,3 @@ COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt && chmod -R 777 /opt/app
 
 ENTRYPOINT ["uvicorn", "api.main:api", "--host", "0.0.0.0", "--port", "8000"]
-
-# USER hello
-# WORKDIR /home/hello
-# ENV PATH="/home/hello/.local/bin:${PATH}"
-
-# COPY --chown=hello:hello api/ api/
-# COPY --chown=hello:hello requirements.txt requirements.txt
-# RUN pip install --user --no-cache-dir -r requirements.txt
-
-# ENTRYPOINT ["uvicorn", "api.main:api", "--host", "0.0.0.0", "--port", "8000"]
