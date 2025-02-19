@@ -29,7 +29,7 @@ on-tag-main: &on-tag-main
 
 commands:
 
-  set-env:
+  set-environment:
     parameters:
       cluster:
         description: target cluster
