@@ -122,8 +122,8 @@ workflows:
           docker-run-arguments: "-e API_VERSION=dev.${CIRCLE_SHA1:0:7}"
           before-build:
             - set-environment
-          requires:
-            - static code analysis
+          # requires:
+          #   - static code analysis
           filters: *on-push-main
 
       # - deploy-hello-restful:
