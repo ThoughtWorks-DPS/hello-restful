@@ -94,21 +94,21 @@ workflows:
 
   development-build:
     jobs:
-      # - python/static-analysis:
-      #     name: static code analysis
-      #     context: *context
-      #     shell: *shell
-      #     package-manager: *package-manager
-      #     install-dev: true
-      #     lint-path: api
-      #     report-coverage: codacy
-      #     after-checkout:
-      #       - run:
-      #           name: set API_VERSION
-      #           command: |
-      #             echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
-      #             source $BASH_ENV
-      #     filters: *on-push-main
+      - python/static-analysis:
+          name: static code analysis
+          context: *context
+          shell: *shell
+          package-manager: *package-manager
+          install-dev: true
+          lint-path: api
+          report-coverage: codacy
+          after-checkout:
+            - run:
+                name: set API_VERSION
+                command: |
+                  echo "export API_VERSION=dev.${CIRCLE_SHA1:0:7}" >> $BASH_ENV
+                  source $BASH_ENV
+          filters: *on-push-main
 
       - python/oci-image-build:
           name: build multi-arch image
@@ -122,19 +122,19 @@ workflows:
           docker-run-arguments: "-e API_VERSION=dev.${CIRCLE_SHA1:0:7}"
           before-build:
             - set-environment
-          # requires:
-          #   - static code analysis
+          requires:
+            - static code analysis
           filters: *on-push-main
 
-      # - deploy-hello-restful:
-      #     name: dev deployment
-      #     context: *context
-      #     cluster: prod-i01-aws-us-east-2
-      #     namespace: dev
-      #     tag: dev.${CIRCLE_SHA1:0:7}
-      #     requires:
-      #       - build multi-arch image
-      #     filters: *on-push-main
+      - deploy-hello-restful:
+          name: dev deployment
+          context: *context
+          cluster: prod-i01-aws-us-east-2
+          namespace: dev
+          tag: dev.${CIRCLE_SHA1:0:7}
+          requires:
+            - build multi-arch image
+          filters: *on-push-main
 
   release:
     jobs:
