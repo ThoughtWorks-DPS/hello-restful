@@ -89,6 +89,29 @@ jobs:
           name: TODO - Deploy observability dashboard, monitoring, and alerting
           command: echo "Placeholder for observability deployment"
 
+  delete-deployment:
+    parameters:
+      cluster:
+        description: Deploy to cluster role
+        type: string
+      namespace:
+        description: Deploy to environment
+        type: string
+      tag:
+        description: Deploy image version
+        type: string
+    docker:
+      - image: *deploy-image
+    steps:
+      - checkout
+      - setup_remote_docker
+      - set-environment:
+          cluster: << parameters.cluster >>
+          tag: << parameters.tag >>
+      - run:
+          name: delete deployment
+          command: bash scripts/uninstall.sh "<< parameters.namespace >>" "<< parameters.tag >>"
+
 workflows:
   version: 2
 
@@ -166,6 +189,16 @@ workflows:
           tag: $CIRCLE_TAG
           requires:
             - publish release candidate
+          filters: *on-tag-main
+
+      - delete-deployment:
+          name: remove preview deployment for sbx cost saving
+          context: *context
+          cluster: sbx-i01-aws-us-east-1
+          namespace: preview
+          tag: $CIRCLE_TAG
+          requires:
+            - preview deployment
           filters: *on-tag-main
 
       - approve-prod:
