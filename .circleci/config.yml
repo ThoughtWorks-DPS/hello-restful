@@ -6,6 +6,7 @@ orbs:
   op: twdps/onepassword@3.0.0
   cosign: twdps/cosign@0.1.1
   kube: twdps/kube-ops@1.1.2
+  do: twdps/pipeline-events@5.0.1
 
 globals:
   - &context empc-lab
@@ -215,4 +216,21 @@ workflows:
           tag: $CIRCLE_TAG
           requires:
             - approve-prod
+          filters: *on-tag-main
+
+      - do/gh-release:
+          name: generate release notes
+          context: *context
+          notes-from-file: release.md
+          include-commit-msg: true
+          before-release:
+            - op/env
+          after-release:
+            - do/slack-bot:
+                channel: lab-events
+                message: Release hello-restful
+                include-link: true
+                include-tag: true
+          requires:
+            - prod deployment
           filters: *on-tag-main
