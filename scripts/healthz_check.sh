@@ -7,6 +7,8 @@ url="https://twdps.io/v1/hello/healthz"
 
 if [[ "$env" != "prod" ]];  then
   url="https://$env.twdps.io/v1/hello/healthz"
+else
+  url="https://api.twdps.io/v1/hello/healthz"
 fi
 
 echo "test $url for version=$tag"
