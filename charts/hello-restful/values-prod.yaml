@@ -3,9 +3,9 @@
 virtualService:
   create: true
   hosts:
-    - twdps.io
+    - api.twdps.io
   gateways:
-    - istio-system/twdps-io-gateway
+    - istio-system/api-twdps-io-gateway
   matchUrl: /v1/hello
 
 image:
